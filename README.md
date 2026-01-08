@@ -6,7 +6,7 @@
 
 | 이름 (Name) | 역할 (Role) | 학교/학과 (Affiliation) | GitHub |
 | :---: | :---: | :---: | :---: |
-| **김승관** | ??? | 한양대학교 컴퓨터소프트웨어학부 | [@GithubID](https://github.com/jerry7129) |
+| **김승관** | ??? | 한양대학교 컴퓨터소프트웨어학부 | [@jerry7129](https://github.com/jerry7129) |
 | **김현우** | ??? | [학교/학과 입력] | [@GithubID](https://github.com/본인ID) |
 
 <br>
