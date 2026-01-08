@@ -1,4 +1,4 @@
-# MadCamp Week 1 Project: [프로젝트 이름]
+# MadCamp Week 1 Project: 두쫀쿠맵을 이을 디저트멥
 
 > **몰입캠프 1주차 프로젝트** > 개발 기간: 2026.01.08 ~ 2026.01.14
 
