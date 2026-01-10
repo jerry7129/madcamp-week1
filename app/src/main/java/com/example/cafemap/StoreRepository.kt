@@ -14,11 +14,21 @@ class StoreRepository {
     fun uploadStoreInfo(store: Store, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         // id가 비어있다면 자동 생성된 ID를 할당
         val docRef = if (store.id.isEmpty()) storeRef.document() else storeRef.document(store.id)
-        val finalStore = store.copy(id = docRef.id)
-
-        docRef.set(finalStore)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onFailure(it) }
+        docRef.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                // 이미 동일한 ID의 가게가 존재할 경우 예외 처리
+                onFailure(Exception("이미 등록된 가게 ID입니다. (ID: ${store.id})"))
+            } else {
+                // 존재하지 않을 때만 업로드 진행
+                val finalStore = store.copy(id = docRef.id)
+                docRef.set(finalStore)
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener { onFailure(it) }
+            }
+        }.addOnFailureListener {
+            // 네트워크 오류 등 문서 읽기 자체가 실패한 경우
+            onFailure(it)
+        }
     }
 
     // 2) 가게 재고 수정 (특정 필드만 업데이트)
@@ -88,6 +98,24 @@ class StoreRepository {
         }.addOnFailureListener { e ->
             println("별점 업데이트 실패: $e")
         }
+    }
+
+    fun deleteStore(storeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        if (storeId.isEmpty()) {
+            onFailure(Exception("삭제할 가게의 ID가 비어있습니다."))
+            return
+        }
+
+        storeRef.document(storeId)
+            .delete()
+            .addOnSuccessListener {
+                println("가게 삭제 완료: $storeId")
+                onSuccess()
+            }
+            .addOnFailureListener {
+                println("가게 삭제 실패: ${it.message}")
+                onFailure(it)
+            }
     }
 
     fun getFilteredStores(

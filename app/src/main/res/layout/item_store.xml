@@ -12,33 +12,56 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvStoreName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="가게 이름" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
 
-        <TextView
-            android:id="@+id/tvStoreRegion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역"
-            android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/tvStoreName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="가게 이름"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/tvStoreRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지역"
+                android:textColor="#666666" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:id="@+id/tvRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="⭐ 4.5"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/tvRatingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(12)" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="0dp">
 
             <TextView
                 android:id="@+id/tvStock"
@@ -73,5 +96,6 @@
                 android:textColor="#BBBBBB"
                 android:layout_gravity="end" />
         </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

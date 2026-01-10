@@ -43,9 +43,10 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         val fabMain = view.findViewById<FloatingActionButton>(R.id.fabMain)
         val fabAddStore = view.findViewById<FloatingActionButton>(R.id.fabAddStore)
         val fabUpdateStock = view.findViewById<FloatingActionButton>(R.id.fabUpdateStock)
+        val fabDeleteStore = view.findViewById<FloatingActionButton>(R.id.fabDeleteStore)
 
         fabMain.setOnClickListener {
-            toggleFab(fabMain, fabAddStore, fabUpdateStock)
+            toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
         }
 
 
@@ -54,13 +55,19 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         fabAddStore.setOnClickListener {
             Toast.makeText(requireContext(), "가게 추가 팝업 열기", Toast.LENGTH_SHORT).show() //필요?
             showAddStoreDialog() // 함수 호출
-            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock)
+            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
+        }
+
+        fabDeleteStore.setOnClickListener {
+            Toast.makeText(requireContext(), "가게 삭제 팝업 열기", Toast.LENGTH_SHORT).show() //필요?
+            showDeleteStoreDialog() // 함수 호출
+            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
         }
 
         fabUpdateStock.setOnClickListener {
             Toast.makeText(requireContext(), "재고 수정 팝업 열기", Toast.LENGTH_SHORT).show() //필요?
             showUpdateStockDialog() // 함수 호출
-            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock)
+            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
         }
 
         // 리사이클러뷰 초기화
@@ -140,6 +147,26 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         builder.show()
     }
 
+    private fun showDeleteStoreDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_delete_store, null)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setPositiveButton("삭제") { _, _ ->
+                val delId = dialogView.findViewById<EditText>(R.id.etDeleteStoreId).text.toString()
+
+                if (delId.isNotEmpty()) {
+                    repository.deleteStore(storeId = delId, onSuccess = {
+                        Toast.makeText(requireContext(), "삭제 성공!", Toast.LENGTH_SHORT).show()
+                        loadStores()
+                    }, onFailure = {
+                        Toast.makeText(requireContext(), "실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                    })
+                }
+            }
+            .setNegativeButton("취소", null)
+        builder.show()
+    }
+
     private fun showUpdateStockDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_update_stock, null)
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
@@ -159,26 +186,32 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
             .show()
     }
 
-    private fun toggleFab(main: FloatingActionButton, add: FloatingActionButton, stock: FloatingActionButton) {
+    private fun toggleFab(main: FloatingActionButton, add: FloatingActionButton, stock: FloatingActionButton, delete: FloatingActionButton) {
         if (isFabOpen) {
             // 메뉴 닫기
             main.setImageResource(android.R.drawable.ic_input_add)
             add.startAnimation(fabClose)
             stock.startAnimation(fabClose)
+            delete.startAnimation(fabClose)
             add.visibility = View.GONE
             stock.visibility = View.GONE
+            delete.visibility = View.GONE
             add.isClickable = false
             stock.isClickable = false
+            delete.isClickable = false
             isFabOpen = false
         } else {
             // 메뉴 열기
             main.setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
             add.startAnimation(fabOpen)
             stock.startAnimation(fabOpen)
+            delete.startAnimation(fabOpen)
             add.visibility = View.VISIBLE
             stock.visibility = View.VISIBLE
+            delete.visibility = View.VISIBLE
             add.isClickable = true
             stock.isClickable = true
+            delete.isClickable = true
             isFabOpen = true
         }
     }
