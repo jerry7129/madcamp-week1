@@ -1,6 +1,8 @@
 package com.example.cafemap.fragments
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -70,7 +72,12 @@ class StoreDetailFragment : DialogFragment() {
 
             tvName.text = name
             tvDescription.text = description
+            
+            // 상태 텍스트 설정
             tvStockStatus.text = getStockStatusText(stockStatus)
+            // 상태에 따른 색상 설정
+            updateStockBadgeStyle(tvStockStatus, stockStatus)
+            
             tvStockCount.text = "• ${stockCount}개 남음"
             tvLastUpdated.text = "● ${formatTime(lastUpdated)} 업데이트"
 
@@ -85,6 +92,19 @@ class StoreDetailFragment : DialogFragment() {
         btnClose.setOnClickListener {
             dismiss()
         }
+    }
+
+    private fun updateStockBadgeStyle(textView: TextView, status: String) {
+        val (bgColor, textColor) = when (status) {
+            "OUT_OF_STOCK" -> "#E0E0E0" to "#757575"  // 품절: 회색
+            "LOW" -> "#FFEBEB" to "#FF4D4D"           // 부족/임박: 연한 빨강
+            "NORMAL" -> "#FFF3E0" to "#FF9800"        // 보통: 연한 주황
+            "PLENTY" -> "#E8F5E9" to "#4CAF50"        // 여유: 연한 초록
+            else -> "#F5F5F5" to "#9E9E9E"
+        }
+        
+        textView.backgroundTintList = ColorStateList.valueOf(Color.parseColor(bgColor))
+        textView.setTextColor(Color.parseColor(textColor))
     }
 
     private fun getStockStatusText(status: String): String {
