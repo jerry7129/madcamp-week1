@@ -1,10 +1,13 @@
 package com.example.cafemap.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.cafemap.R
 import com.example.cafemap.Store
@@ -84,7 +87,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 4. ★ 위치가 갱신되면 로딩 끝!
         // Follow 모드를 켜고 -> GPS가 잡혀서 지도가 움직이면 -> 그때 로딩바를 끕니다.
-        naverMap.addOnLocationChangeListener {
+        naverMap.addOnLocationChangeListener { location ->
             // 위치가 잡혔으니 로딩바 숨김
             if (progressBar?.visibility == View.VISIBLE) {
                 progressBar?.visibility = View.GONE
@@ -101,6 +104,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 progressBar?.visibility = View.GONE
             }
         }
+
         // 카페 데이터 가져오기 및 마커 표시
         fetchAndDisplayStores()
     }
@@ -122,7 +126,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
 
                     marker.setOnClickListener {
-                        showStoreInfoFragment(store)
+                        showStoreInfoDialog(store)
                         true
                     }
                     markers.add(marker)
@@ -131,19 +135,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showStoreInfoFragment(store: Store) {
+    private fun showStoreInfoDialog(store: Store) {
         val detailFragment = StoreDetailFragment.newInstance(
             store.name,
             store.description,
             store.stockStatus.name,
             store.avgRating
         )
-
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .add(R.id.fragment_container, detailFragment)
-            .addToBackStack(null)
-            .commit()
+        // DialogFragment로 띄우기 (childFragmentManager 사용)
+        detailFragment.show(childFragmentManager, "store_detail")
     }
 
     // 6. 권한 허용 시 처리 (onRequestPermissionsResult)
@@ -155,6 +155,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ) {
         if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             if (locationSource.isActivated) {
+                // 권한 허용됨 -> 바로 Follow 모드 및 ★로딩바 표시★
                 naverMap.locationTrackingMode = LocationTrackingMode.Follow
                 progressBar?.visibility = View.VISIBLE
             } else {
