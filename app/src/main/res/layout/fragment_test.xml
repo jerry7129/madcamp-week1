@@ -36,6 +36,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="가게 설명"/>
+        
+        <!-- 위도, 경도 입력 필드 추가 -->
+        <EditText
+            android:id="@+id/etStoreLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="위도 (Latitude - 예: 37.5665)"
+            android:inputType="numberDecimal|numberSigned"/>
+        <EditText
+            android:id="@+id/etStoreLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="경도 (Longitude - 예: 126.9780)"
+            android:inputType="numberDecimal|numberSigned"/>
+
         <Button
             android:id="@+id/btnAddStore"
             android:layout_width="match_parent"
