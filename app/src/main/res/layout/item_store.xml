@@ -46,6 +46,19 @@
                 android:layout_height="wrap_content"
                 android:text="재고: 10개" />
 
+            <TextView
+                android:id="@+id/tvStockStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:text="품절"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_stock_status" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"

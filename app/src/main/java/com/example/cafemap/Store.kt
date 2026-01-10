@@ -3,7 +3,7 @@ package com.example.cafemap
 // Firebase NoSQL에서 사용하기 좋게 Enum 대신 String이나 기본 타입을 권장하기도 하지만,
 // 현재 구조를 유지하려면 아래와 같이 작성합니다.
 enum class StockStatus {
-    OUT_OF_STOCK, LOW, NORMAL, PLENTY
+    OUT_OF_STOCK, LOW, NORMAL, PLENTY // 품절, 부족, 보통, 풍부
 }
 
 data class Store(
