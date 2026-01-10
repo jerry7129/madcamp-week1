@@ -110,7 +110,7 @@ class StoreDetailFragment : DialogFragment() {
     private fun getStockStatusText(status: String): String {
         return when (status) {
             "OUT_OF_STOCK" -> "품절"
-            "LOW" -> "품절 임박"
+            "LOW" -> "부족"
             "NORMAL" -> "보통"
             "PLENTY" -> "여유"
             else -> status
