@@ -1,0 +1,82 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Firebase DB 테스트"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etStoreName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 이름(ID로 반영 예정)"/>
+        <EditText
+            android:id="@+id/etStoreMapLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 링크"/>
+        <EditText
+            android:id="@+id/etStoreRegion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 지역"/>
+        <EditText
+            android:id="@+id/etStoreDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 설명"/>
+        <Button
+            android:id="@+id/btnAddStore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1) 가게 추가"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etStoreIdForStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 ID (문서 ID)"/>
+        <EditText
+            android:id="@+id/etStockCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="새 재고 수량"
+            android:inputType="number"/>
+        <Button
+            android:id="@+id/btnUpdateStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2) 재고 수정"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etStoreIdForRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 ID (문서 ID)"/>
+        <EditText
+            android:id="@+id/etRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="별점 (0.0~5.0)"
+            android:inputType="numberDecimal"/>
+        <Button
+            android:id="@+id/btnRateStore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3) 별점 매기기"/>
+
+    </LinearLayout>
+</ScrollView>

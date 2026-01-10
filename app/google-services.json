@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "728529107438",
+    "project_id": "doojjonkoo-awesome",
+    "storage_bucket": "doojjonkoo-awesome.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728529107438:android:fbb90a6903eb17141cf6ff",
+        "android_client_info": {
+          "package_name": "com.example.cafemap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnctYKen6L3VO0bHLE74G8jFC3j9Th0g0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
