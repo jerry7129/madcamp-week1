@@ -66,24 +66,29 @@
             app:layout_constraintTop_toTopOf="@id/tvDetailName"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Stock Status Badge -->
-        <TextView
-            android:id="@+id/tvDetailStockStatus"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvStockStatusBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/ic_launcher_background"
-            android:backgroundTint="#FFEBEB"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="2dp"
-            android:text="품절 임박"
-            android:textColor="#FF4D4D"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="#FFEBEB"
+            app:cardElevation="0dp"
             app:layout_constraintTop_toBottomOf="@id/tvDetailName"
-            app:layout_constraintStart_toStartOf="@id/tvDetailName" />
+            app:layout_constraintStart_toStartOf="@id/tvDetailName">
 
-        <!-- Stock Count -->
+            <TextView
+                android:id="@+id/tvDetailStockStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="품절 임박"
+                android:textColor="#FF4D4D"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/tvDetailStockCount"
             android:layout_width="wrap_content"
@@ -92,11 +97,10 @@
             android:text="• 0개 남음"
             android:textColor="#9E9E9E"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/tvDetailStockStatus"
-            app:layout_constraintStart_toEndOf="@id/tvDetailStockStatus"
-            app:layout_constraintTop_toTopOf="@id/tvDetailStockStatus" />
+            app:layout_constraintStart_toEndOf="@id/cvStockStatusBadge"
+            app:layout_constraintTop_toTopOf="@id/cvStockStatusBadge"
+            app:layout_constraintBottom_toBottomOf="@id/cvStockStatusBadge" />
 
-        <!-- Last Updated -->
         <TextView
             android:id="@+id/tvDetailLastUpdated"
             android:layout_width="wrap_content"
@@ -105,7 +109,7 @@
             android:text="● 2일 전 업데이트"
             android:textColor="#BDBDBD"
             android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/tvDetailStockStatus"
+            app:layout_constraintTop_toBottomOf="@id/cvStockStatusBadge"
             app:layout_constraintStart_toStartOf="@id/tvDetailName" />
 
         <!-- Description Box -->
