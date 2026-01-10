@@ -59,7 +59,9 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // 현재 보여지고 있는 프래그먼트들에게 결과 전달
         supportFragmentManager.fragments.forEach { fragment ->
-            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            if (fragment.isAdded) {
+                fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
         }
     }
 }

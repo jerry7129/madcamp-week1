@@ -74,7 +74,7 @@ class StoreRepository {
 
             val newReviewCount = currentReviewCount + 1
             val totalScore = (currentAvgRating * currentReviewCount) + newRating
-            val newAvgRating = totalScore / newReviewCount
+            val newAvgRating = Math.round((totalScore / newReviewCount) * 10f) / 10f
 
             // 3. 데이터 쓰기 (Write)
             transaction.update(storeDocRef, "avgRating", newAvgRating)
