@@ -2,6 +2,7 @@ package com.example.cafemap.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,16 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.cafemap.R
+import com.example.cafemap.Store
+import com.example.cafemap.StoreRepository
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -21,6 +27,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
     private var btnLocation: android.widget.ImageButton? = null
     private var progressBar: android.widget.ProgressBar? = null
+
+    private val storeRepository = StoreRepository()
+    private val markers = mutableListOf<Marker>()
 
     // 권한 요청 코드 (1000번)
     companion object {
@@ -88,13 +97,53 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 5. 버튼 색상 관리 (Follow일 때 파란색)
         naverMap.addOnOptionChangeListener {
             if (naverMap.locationTrackingMode == LocationTrackingMode.Follow) {
-                btnLocation?.setColorFilter(android.graphics.Color.BLUE)
+                btnLocation?.setColorFilter(Color.BLUE)
             } else {
-                btnLocation?.setColorFilter(android.graphics.Color.BLACK)
+                btnLocation?.setColorFilter(Color.BLACK)
                 // 혹시 모드 변경으로 꺼졌을 때를 대비해 로딩바 숨김
                 progressBar?.visibility = View.GONE
             }
         }
+
+        // 카페 데이터 가져오기 및 마커 표시
+        fetchAndDisplayStores()
+    }
+
+    private fun fetchAndDisplayStores() {
+        storeRepository.getFilteredStores { stores ->
+            // 기존 마커 제거
+            markers.forEach { it.map = null }
+            markers.clear()
+
+            stores.forEach { store ->
+                if (store.latitude != 0.0 && store.longitude != 0.0) {
+                    val marker = Marker().apply {
+                        position = LatLng(store.latitude, store.longitude)
+                        captionText = store.name
+                        icon = MarkerIcons.BLACK
+                        iconTintColor = Color.RED
+                        map = naverMap
+                    }
+
+                    marker.setOnClickListener {
+                        showStoreInfoDialog(store)
+                        true
+                    }
+                    markers.add(marker)
+                }
+            }
+        }
+    }
+
+    private fun showStoreInfoDialog(store: Store) {
+        val detailFragment = StoreDetailFragment.newInstance(
+            store.name,
+            store.description,
+            store.stockStatus.name,
+            store.avgRating
+        )
+        // DialogFragment로 띄우기 (childFragmentManager 사용)
+        detailFragment.show(childFragmentManager, "store_detail")
     }
 
     // 6. 권한 허용 시 처리 (onRequestPermissionsResult)

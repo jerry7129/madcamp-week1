@@ -20,6 +20,8 @@ class TestFragment : Fragment(R.layout.fragment_test) {
         val etStoreMapLink = view.findViewById<EditText>(R.id.etStoreMapLink)
         val etStoreRegion = view.findViewById<EditText>(R.id.etStoreRegion)
         val etStoreDescription = view.findViewById<EditText>(R.id.etStoreDescription)
+        val etStoreLatitude = view.findViewById<EditText>(R.id.etStoreLatitude)
+        val etStoreLongitude = view.findViewById<EditText>(R.id.etStoreLongitude)
         val btnAddStore = view.findViewById<Button>(R.id.btnAddStore)
 
         val etStoreIdForStock = view.findViewById<EditText>(R.id.etStoreIdForStock)
@@ -36,24 +38,33 @@ class TestFragment : Fragment(R.layout.fragment_test) {
             val link = etStoreMapLink.text.toString()
             val region = etStoreRegion.text.toString()
             val description = etStoreDescription.text.toString()
+            val lat = etStoreLatitude.text.toString().toDoubleOrNull() ?: 0.0
+            val lng = etStoreLongitude.text.toString().toDoubleOrNull() ?: 0.0
+
             if (name.isNotEmpty()) {
                 val newStore = Store(
                     id = name,
                     name = name,
                     region = region,
                     mapLink = link,
-                    description = description
-                ) // 기본값 예시
+                    description = description,
+                    latitude = lat,
+                    longitude = lng
+                )
                 repository.uploadStoreInfo(newStore, {
                     Toast.makeText(requireContext(), "가게 추가 성공!", Toast.LENGTH_SHORT).show()
                     etStoreName.text.clear()
                     etStoreMapLink.text.clear()
                     etStoreRegion.text.clear()
                     etStoreDescription.text.clear()
+                    etStoreLatitude.text.clear()
+                    etStoreLongitude.text.clear()
 
                 }, {
                     Toast.makeText(requireContext(), "에러: ${it.message}", Toast.LENGTH_SHORT).show()
                 })
+            } else {
+                Toast.makeText(requireContext(), "가게 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
 
