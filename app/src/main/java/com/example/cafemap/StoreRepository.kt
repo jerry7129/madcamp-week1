@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query // 정렬 및 필터링을 위해 필수
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects // 리스트 변환을 위해 필수? Gemini 피셜
+import com.google.firebase.firestore.ListenerRegistration
 
 class StoreRepository {
     private val db = FirebaseFirestore.getInstance()
@@ -150,5 +151,17 @@ class StoreRepository {
                 onResult(stores)
             }
             .addOnFailureListener { onResult(emptyList()) }
+    }
+
+    // 실시간으로 가게 정보를 감시하는 리스너 추가
+    fun listenToStores(onResult: (List<Store>) -> Unit): ListenerRegistration {
+        return storeRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                onResult(emptyList())
+                return@addSnapshotListener
+            }
+            val stores = snapshot?.toObjects(Store::class.java) ?: emptyList()
+            onResult(stores)
+        }
     }
 }
