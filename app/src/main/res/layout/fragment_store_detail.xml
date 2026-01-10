@@ -1,89 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="8dp"
-    android:layout_margin="20dp">
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp"
+    android:layout_margin="12dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="20dp"
         android:background="#FFFFFF">
 
+        <!-- Top Handle / Indicator -->
+        <View
+            android:id="@+id/handle"
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Store Image (Placeholder) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvStoreImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/handle"
+            app:layout_constraintStart_toStartOf="parent">
+            <ImageView
+                android:id="@+id/ivStoreImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Store Name -->
         <TextView
             android:id="@+id/tvDetailName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="가게 이름"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/cvStoreImage"
+            app:layout_constraintStart_toEndOf="@id/cvStoreImage"
+            app:layout_constraintEnd_toStartOf="@id/btnCloseDetail" />
+
+        <!-- Close Button -->
+        <ImageView
+            android:id="@+id/btnCloseDetail"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="#BDBDBD"
+            app:layout_constraintTop_toTopOf="@id/tvDetailName"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Stock Status Badge -->
+        <TextView
+            android:id="@+id/tvDetailStockStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="가게 이름"
-            android:textSize="22sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_launcher_background"
+            android:backgroundTint="#FFEBEB"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="품절 임박"
+            android:textColor="#FF4D4D"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#333333"
-            android:layout_marginBottom="12dp"/>
+            app:layout_constraintTop_toBottomOf="@id/tvDetailName"
+            app:layout_constraintStart_toStartOf="@id/tvDetailName" />
 
+        <!-- Stock Count -->
+        <TextView
+            android:id="@+id/tvDetailStockCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="• 0개 남음"
+            android:textColor="#9E9E9E"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvDetailStockStatus"
+            app:layout_constraintStart_toEndOf="@id/tvDetailStockStatus"
+            app:layout_constraintTop_toTopOf="@id/tvDetailStockStatus" />
+
+        <!-- Last Updated -->
+        <TextView
+            android:id="@+id/tvDetailLastUpdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="● 2일 전 업데이트"
+            android:textColor="#BDBDBD"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/tvDetailStockStatus"
+            app:layout_constraintStart_toStartOf="@id/tvDetailName" />
+
+        <!-- Description Box -->
         <TextView
             android:id="@+id/tvDetailDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="가게 설명"
-            android:textSize="15sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_launcher_background"
+            android:backgroundTint="#F8F9FA"
+            android:padding="16dp"
+            android:text="가게 설명이 여기에 표시됩니다."
+            android:textColor="#424242"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/cvStoreImage" />
 
-        <View
+        <!-- Naver Place Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNaverPlace"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEEEEE"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_launcher_background"
+            android:backgroundTint="#03C75A"
+            android:text="네이버 플레이스에서 보기"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tvDetailDescription" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="재고 상태: "
-                android:textSize="15sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/tvDetailStock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:textSize="15sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="평점: "
-                android:textSize="15sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/tvDetailRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0.0"
-                android:textSize="15sp"/>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btnCloseDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="확인"
-            android:backgroundTint="#2196F3"
-            android:textColor="#FFFFFF"/>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -2,6 +2,7 @@ package com.example.cafemap
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.cafemap.fragments.MapFragment
 import com.example.cafemap.fragments.StoreListFragment
 // 만약 상대방의 파일을 가져왔다면 아래 주석을 풀고 import 하세요
@@ -15,6 +16,9 @@ class MainActivity : AppCompatActivity() {
     private val mapFragment = MapFragment()
     private val testFragment = TestFragment()
     private val storeListFragment = StoreListFragment()
+    
+    // 현재 보고 있는 프래그먼트를 관리하기 위한 변수
+    private var activeFragment: Fragment = mapFragment
 
     // 상대방이 만든 DB 테스트용 프래그먼트 (필요하다면 파일을 복사해오고 주석 해제)
     // private val testFragment = TestFragment()
@@ -26,9 +30,12 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         // 1. 초기 화면 설정 (앱 켜자마자 지도 보여주기)
+        // 상태 유지를 위해 모든 프래그먼트를 미리 add하고, 지도만 show 상태로 둡니다.
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, mapFragment)
+                .add(R.id.fragment_container, storeListFragment).hide(storeListFragment)
+                .add(R.id.fragment_container, testFragment).hide(testFragment)
+                .add(R.id.fragment_container, mapFragment)
                 .commit()
         }
 
@@ -44,11 +51,15 @@ class MainActivity : AppCompatActivity() {
                 else -> null
             }
 
-            // 선택된 프래그먼트가 있으면 화면 교체
+            // 선택된 프래그먼트가 있으면 replace 대신 show/hide를 사용하여 상태 유지
             selectedFragment?.let { fragment ->
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .commit()
+                if (fragment != activeFragment) {
+                    supportFragmentManager.beginTransaction()
+                        .hide(activeFragment)
+                        .show(fragment)
+                        .commit()
+                    activeFragment = fragment
+                }
                 true
             } ?: false
         }
