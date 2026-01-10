@@ -140,7 +140,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             store.name,
             store.description,
             store.stockStatus.name,
-            store.avgRating
+            store.stockCount,
+            store.lastUpdated,
+            store.mapLink
         )
         // DialogFragment로 띄우기 (childFragmentManager 사용)
         detailFragment.show(childFragmentManager, "store_detail")
