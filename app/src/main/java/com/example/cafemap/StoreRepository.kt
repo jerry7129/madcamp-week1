@@ -89,6 +89,24 @@ class StoreRepository {
         }
     }
 
+    fun deleteStore(storeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        if (storeId.isEmpty()) {
+            onFailure(Exception("삭제할 가게의 ID가 비어있습니다."))
+            return
+        }
+
+        storeRef.document(storeId)
+            .delete()
+            .addOnSuccessListener {
+                println("가게 삭제 완료: $storeId")
+                onSuccess()
+            }
+            .addOnFailureListener {
+                println("가게 삭제 실패: ${it.message}")
+                onFailure(it)
+            }
+    }
+
     fun getFilteredStores(
         region: String? = null,
         minRating: Float? = null,

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cafemap.fragments.MapFragment
 import com.example.cafemap.fragments.StoreListFragment
-// 만약 상대방의 파일을 가져왔다면 아래 주석을 풀고 import 하세요
 import com.example.cafemap.fragments.TestFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -14,7 +13,8 @@ class MainActivity : AppCompatActivity() {
     // 프래그먼트 인스턴스 생성
     // (지도는 상태 유지가 중요하므로 미리 만들어두는 것이 좋습니다)
     private val mapFragment = MapFragment()
-    private val testFragment = TestFragment()
+    // test 삭제
+    //private val testFragment = TestFragment()
     private val storeListFragment = StoreListFragment()
     
     // 현재 보고 있는 프래그먼트를 관리하기 위한 변수
@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, storeListFragment).hide(storeListFragment)
-                .add(R.id.fragment_container, testFragment).hide(testFragment)
+                // test 삭제
+                //.add(R.id.fragment_container, testFragment).hide(testFragment)
                 .add(R.id.fragment_container, mapFragment)
                 .commit()
         }
@@ -44,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             val selectedFragment = when (item.itemId) {
                 R.id.tab_map -> mapFragment
 
-                R.id.nav_test -> testFragment
+                // test 삭제
+                //R.id.nav_test -> testFragment
 
                 R.id.nav_list -> storeListFragment
                 // [추가 옵션] 메뉴(xml)에 아이템을 추가해서 테스트 화면을 보고 싶다면 사용
