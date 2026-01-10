@@ -5,14 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import android.content.res.ColorStateList
+import android.graphics.Color
+import androidx.core.content.ContextCompat
+import com.example.cafemap.Store           // 'Store' 클래스 인식용
 
-class StoreAdapter(private var stores: List<Store>) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+class StoreAdapter(private var stores: List<Store>, private val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
     class StoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tvStoreName)
         val region: TextView = view.findViewById(R.id.tvStoreRegion)
         val rating: TextView = view.findViewById(R.id.tvRating)
         val stock: TextView = view.findViewById(R.id.tvStock)
+        val stockStatus: TextView = view.findViewById(R.id.tvStockStatus)
         val lastUpdated: TextView = view.findViewById(R.id.tvLastUpdated)
     }
 
@@ -28,6 +33,20 @@ class StoreAdapter(private var stores: List<Store>) : RecyclerView.Adapter<Store
         holder.rating.text = "⭐ ${String.format("%.1f", store.avgRating)}"
         holder.stock.text = "재고: ${store.stockCount}개"
         holder.lastUpdated.text = formatTimeAgo(store.lastUpdated)
+        val (statusText, colorStr) = when {
+            store.stockCount <= 0 -> "품절" to "#9E9E9E"  // 회색
+            store.stockCount <= 5 -> "부족" to "#FF5252"  // 빨강
+            store.stockCount <= 15 -> "보통" to "#FFAB40" // 주황
+            else -> "풍부" to "#4CAF50"                   // 초록
+        }
+        holder.stockStatus.apply {
+            text = statusText
+            // 배경색 변경 (XML에서 만든 drawable의 색상을 변경)
+            backgroundTintList = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(colorStr))
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick(store)
+        }
     }
 
     override fun getItemCount() = stores.size

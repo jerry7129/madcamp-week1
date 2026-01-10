@@ -24,7 +24,7 @@ class StoreRepository {
     fun updateStock(storeId: String, newCount: Int) {
         // 로직: 재고 수에 따라 상태(Status)도 함께 변경
         val status = when {
-            newCount <= 0 -> StockStatus.OUT_OF_STOCK.name
+            newCount <= 0 -> StockStatus.OUT_OF_STOCK.name  //상태의 기준은 나중에 수정 바람
             newCount <= 5 -> StockStatus.LOW.name
             newCount <= 20 -> StockStatus.NORMAL.name
             else -> StockStatus.PLENTY.name
