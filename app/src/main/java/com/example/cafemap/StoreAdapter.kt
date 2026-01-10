@@ -16,6 +16,7 @@ class StoreAdapter(private var stores: List<Store>, private val onItemClick: (St
         val name: TextView = view.findViewById(R.id.tvStoreName)
         val region: TextView = view.findViewById(R.id.tvStoreRegion)
         val rating: TextView = view.findViewById(R.id.tvRating)
+        val reviewcount: TextView = view.findViewById(R.id.tvRatingCount)
         val stock: TextView = view.findViewById(R.id.tvStock)
         val stockStatus: TextView = view.findViewById(R.id.tvStockStatus)
         val lastUpdated: TextView = view.findViewById(R.id.tvLastUpdated)
@@ -31,6 +32,7 @@ class StoreAdapter(private var stores: List<Store>, private val onItemClick: (St
         holder.name.text = store.name
         holder.region.text = store.region
         holder.rating.text = "⭐ ${String.format("%.1f", store.avgRating)}"
+        holder.reviewcount.text = "(${store.reviewCount})"
         holder.stock.text = "재고: ${store.stockCount}개"
         holder.lastUpdated.text = formatTimeAgo(store.lastUpdated)
         val (statusText, colorStr) = when {
