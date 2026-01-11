@@ -1,6 +1,6 @@
 package com.example.cafemap.fragments
-
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable // ✨ Drawable 색상 변경용
@@ -11,10 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast // ✨ Toast 추가
+import androidx.activity.result.contract.ActivityResultContracts // ✨ 최신 권한 요청 방식
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +35,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.google.firebase.firestore.ListenerRegistration
+import androidx.core.graphics.toColorInt
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -52,6 +57,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // 권한 요청 코드 (1000번)
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    }
+
+    // ✨ 최신 권한 요청 런처 등록
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+
+        if (granted) {
+            // 권한 허용 시 Follow 모드 진입
+            naverMap.locationTrackingMode = LocationTrackingMode.Follow
+            progressBar?.visibility = View.VISIBLE
+        } else {
+            // 권한 거부 시 안내
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(requireContext(), "위치 권한이 차단되었습니다. 설정에서 허용해주세요.", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireContext(), "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -81,6 +107,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 초기 설정
         naverMap.locationSource = locationSource
         naverMap.uiSettings.isLocationButtonEnabled = false
+        // 확대/축소 버튼(+,-) 비활성화
+        naverMap.uiSettings.isZoomControlEnabled = false
 
         // 뷰 찾아오기
         btnLocation = view?.findViewById(R.id.btn_location_custom)
@@ -92,16 +120,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         rvSearchResults?.layoutManager = LinearLayoutManager(requireContext())
 
+        // 지도 클릭 시 검색 결과 숨기기
+        naverMap.setOnMapClickListener { _, _ ->
+            hideSearchResults()
+        }
+
         // 버튼 클릭 이벤트
         btnLocation?.setOnClickListener {
-            if (naverMap.locationTrackingMode == LocationTrackingMode.Follow) {
-                // 끄는 경우: None으로 바꾸고 로딩바 숨김
-                naverMap.locationTrackingMode = LocationTrackingMode.None
-                progressBar?.visibility = View.GONE
+            if (checkLocationPermission()) {
+                if (naverMap.locationTrackingMode == LocationTrackingMode.Follow) {
+                    // 끄는 경우: None으로 바꾸면 addOnOptionChangeListener에서 처리함
+                    naverMap.locationTrackingMode = LocationTrackingMode.None
+                } else {
+                    // 켜는 경우: Follow로 바꾸고 로딩바 표시
+                    naverMap.locationTrackingMode = LocationTrackingMode.Follow
+                    progressBar?.visibility = View.VISIBLE
+                }
             } else {
-                // 켜는 경우: Follow로 바꾸고 ★로딩바 표시★
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow
-                progressBar?.visibility = View.VISIBLE
+                // ✨ 권한이 없으면 다시 요청 (런처 사용)
+                requestPermissionLauncher.launch(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                )
             }
         }
 
@@ -112,7 +151,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        // 버튼 색상 관리 (Follow일 때 파란색)
+        // 버튼 색상 및 로딩바 상태 관리
         naverMap.addOnOptionChangeListener {
             if (naverMap.locationTrackingMode == LocationTrackingMode.Follow) {
                 btnLocation?.setColorFilter(Color.BLUE)
@@ -122,41 +161,84 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
+        // 앱 시작 시 권한 체크
+        if (checkLocationPermission()) {
+            // 권한이 이미 허용되어 있다면 바로 Follow 모드 적용
+            naverMap.locationTrackingMode = LocationTrackingMode.Follow
+            // 로딩바를 명시적으로 띄워줌
+            progressBar?.visibility = View.VISIBLE
+        } else {
+            // ✨ 권한이 없으면 요청 (런처 사용)
+            requestPermissionLauncher.launch(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+            )
+        }
+
         // 검색 기능 설정
         setupSearch()
         // 카페 데이터 실시간 감시 및 마커 표시
         startListeningStores()
     }
 
+    private fun checkLocationPermission(): Boolean {
+        val hasFineLocation = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val hasCoarseLocation = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return hasFineLocation || hasCoarseLocation
+    }
+
     private fun setupSearch() {
         etSearch?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s.toString().trim()
-                if (query.isNotEmpty()) {
-                    val filtered = currentStores.filter {
-                        it.name.contains(query, ignoreCase = true) || it.region.contains(query, ignoreCase = true)
-                    }
-                    if (filtered.isNotEmpty()) {
-                        showSearchResults(filtered)
-                    } else {
-                        cvSearchResults?.visibility = View.GONE
-                    }
-                } else {
+                // 검색어 지우면 결과창 숨김
+                if (s.isNullOrEmpty()) {
                     cvSearchResults?.visibility = View.GONE
                 }
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // 엔터(검색 버튼)를 누르면 검색 결과 표시
         etSearch?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                cvSearchResults?.visibility = View.GONE
+                performSearch()
                 true
             } else {
                 false
             }
         }
+
+        // 돋보기 아이콘 클릭 시 검색 수행
+        ivSearchIcon?.setOnClickListener {
+            performSearch()
+        }
+    }
+
+    private fun performSearch() {
+        val query = etSearch?.text.toString().trim()
+        if (query.isNotEmpty()) {
+            val filtered = currentStores.filter {
+                it.name.contains(query, ignoreCase = true) || it.region.contains(query, ignoreCase = true)
+            }
+            if (filtered.isNotEmpty()) {
+                showSearchResults(filtered)
+            } else {
+                cvSearchResults?.visibility = View.GONE
+            }
+        }
+        hideKeyboard()
+        etSearch?.clearFocus()
+    }
+
+    private fun hideSearchResults() {
+        cvSearchResults?.visibility = View.GONE
+        etSearch?.clearFocus()
+        hideKeyboard()
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(etSearch?.windowToken, 0)
     }
 
     private fun showSearchResults(stores: List<Store>) {
@@ -166,6 +248,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             // 검색 선택 후 검색창 내용 리셋
             etSearch?.setText("")
             etSearch?.clearFocus()
+            hideKeyboard()
 
             val destination = LatLng(selectedStore.latitude, selectedStore.longitude)
             naverMap.moveCamera(CameraUpdate.scrollTo(destination))
@@ -208,14 +291,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 // ✨ Shape Drawable 색상 동적 변경 로직 ✨
                 val background = tvBadge.background as? GradientDrawable
-                background?.setColor(Color.parseColor(colorStr)) // 배경색 변경
+                background?.setColor(colorStr.toColorInt()) // 배경색 변경
 
-                // 가게 이름이나 조건에 따라 다른 이미지를 넣을 수 있습니다.
-                val imageResId = when (store.name) {
-                    "스타벅스" -> R.drawable.ic_cafe_test // 스타벅스 이미지 (파일이 있어야 함)
-                    "이디야" -> R.drawable.ic_cafe_test     // 이디야 이미지
-                    else -> R.drawable.ic_cafe_test // 기본 이미지 (없으면 기본값)
-                }
+//                // 가게 이름이나 조건에 따라 다른 이미지를 넣을 수 있습니다.
+//                val imageResId = when (store.name) {
+//                    "스타벅스" -> R.drawable.ic_cafe_test // 스타벅스 이미지 (파일이 있어야 함)
+//                    "이디야" -> R.drawable.ic_cafe_test     // 이디야 이미지
+//                    else -> R.drawable.ic_cafe_test // 기본 이미지 (없으면 기본값)
+//                }
+                val imageResId = R.drawable.ic_marker_test
 
                 // 이미지 뷰에 리소스 설정
                 ivMain.setImageResource(imageResId)
@@ -279,19 +363,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         override fun getItemCount() = stores.size
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if (locationSource.isActivated) {
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow
-                progressBar?.visibility = View.VISIBLE
-            } else {
-                naverMap.locationTrackingMode = LocationTrackingMode.None
-            }
-            return
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }
