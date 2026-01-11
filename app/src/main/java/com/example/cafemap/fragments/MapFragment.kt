@@ -163,7 +163,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         cvSearchResults?.visibility = View.VISIBLE
         rvSearchResults?.adapter = SearchResultAdapter(stores) { selectedStore ->
             cvSearchResults?.visibility = View.GONE
-            etSearch?.setText(selectedStore.name)
+            // 검색 선택 후 검색창 내용 리셋
+            etSearch?.setText("")
             etSearch?.clearFocus()
 
             val destination = LatLng(selectedStore.latitude, selectedStore.longitude)
@@ -189,9 +190,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if (store.latitude != 0.0 && store.longitude != 0.0) {
                 // 커스텀 마커 뷰 생성
                 val customMarkerView = LayoutInflater.from(requireContext()).inflate(R.layout.item_marker_custom, null)
-
-                // ❌ 기존 코드: CardView를 찾아서 배경색 변경 (삭제됨)
-                // val cvBadge = customMarkerView.findViewById<CardView>(R.id.cvMarkerBadge)
 
                 // ✅ 수정된 코드: TextView를 찾아서 Background Drawable의 색상 변경
                 val tvBadge = customMarkerView.findViewById<TextView>(R.id.tvMarkerStockBadge)
