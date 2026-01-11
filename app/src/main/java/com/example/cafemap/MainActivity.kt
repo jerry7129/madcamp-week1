@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cafemap.fragments.MapFragment
 import com.example.cafemap.fragments.StoreListFragment
-import com.example.cafemap.fragments.TestFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

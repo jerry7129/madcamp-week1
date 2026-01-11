@@ -1,23 +1,25 @@
 package com.example.cafemap.fragments
 
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RatingBar
 import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cafemap.R
+import com.example.cafemap.Store
 import com.example.cafemap.StoreAdapter
 import com.example.cafemap.StoreRepository
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import android.widget.TextView
-import android.widget.RatingBar
-import com.example.cafemap.Store           // 'Store' 클래스 인식용
+import java.util.Locale
 
 class StoreListFragment : Fragment(R.layout.fragment_store_list) {
     private val repository = StoreRepository()
@@ -123,15 +125,48 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
 
     private fun showAddStoreDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_store, null)
+        
+        val etName = dialogView.findViewById<EditText>(R.id.etName)
+        val etRegion = dialogView.findViewById<EditText>(R.id.etRegion)
+        val etLink = dialogView.findViewById<EditText>(R.id.etLink)
+        val etDesc = dialogView.findViewById<EditText>(R.id.etDesc)
+        val etAddress = dialogView.findViewById<EditText>(R.id.etAddress)
+        val btnSearchAddress = dialogView.findViewById<Button>(R.id.btnSearchAddress)
+        val etLat = dialogView.findViewById<EditText>(R.id.etDialogLatitude)
+        val etLng = dialogView.findViewById<EditText>(R.id.etDialogLongtitude)
+
+        // 주소 검색 버튼 클릭 시 위도/경도 자동 입력 로직
+        btnSearchAddress.setOnClickListener {
+            val address = etAddress.text.toString()
+            if (address.isNotEmpty()) {
+                try {
+                    val geocoder = Geocoder(requireContext(), Locale.KOREA)
+                    val addresses = geocoder.getFromLocationName(address, 1)
+                    if (!addresses.isNullOrEmpty()) {
+                        val location = addresses[0]
+                        etLat.setText(location.latitude.toString())
+                        etLng.setText(location.longitude.toString())
+                        Toast.makeText(requireContext(), "좌표를 성공적으로 찾았습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "해당 주소의 좌표를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Geocoder 서비스 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "주소를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setPositiveButton("등록") { _, _ ->
-                val name = dialogView.findViewById<EditText>(R.id.etName).text.toString()
-                val region = dialogView.findViewById<EditText>(R.id.etRegion).text.toString()
-                val link = dialogView.findViewById<EditText>(R.id.etLink).text.toString()
-                val desc = dialogView.findViewById<EditText>(R.id.etDesc).text.toString()
-                val lat = dialogView.findViewById<EditText>(R.id.etDialogLatitude).text.toString().toDoubleOrNull() ?: 0.0
-                val long = dialogView.findViewById<EditText>(R.id.etDialogLongtitude).text.toString().toDoubleOrNull() ?: 0.0
+                val name = etName.text.toString()
+                val region = etRegion.text.toString()
+                val link = etLink.text.toString()
+                val desc = etDesc.text.toString()
+                val lat = etLat.text.toString().toDoubleOrNull() ?: 0.0
+                val long = etLng.text.toString().toDoubleOrNull() ?: 0.0
 
                 if (name.isNotEmpty()) {
                     val newStore = Store(id = name, name = name, region = region, mapLink = link, description = desc, latitude = lat, longitude = long)
