@@ -36,7 +36,7 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         fabClose = AnimationUtils.loadAnimation(requireContext(), R.anim.fab_close)
 
         // 뷰 연결
-        val etRegion = view.findViewById<EditText>(R.id.etFilterRegion)
+        val etAddress = view.findViewById<EditText>(R.id.etFilterAddress)
         val etRating = view.findViewById<EditText>(R.id.etMinRating)
         val spinnerSort = view.findViewById<Spinner>(R.id.spinnerSort)
         val btnApply = view.findViewById<Button>(R.id.btnApplyFilter)
@@ -84,7 +84,7 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
 
         // 버튼 클릭 시 필터 적용
         btnApply.setOnClickListener {
-            val region = etRegion.text.toString().takeIf { it.isNotEmpty() }
+            val address = etAddress.text.toString().takeIf { it.isNotEmpty() }
             val minRating = etRating.text.toString().toFloatOrNull()
 
             // Spinner 선택값에 따른 sortBy 변환
@@ -94,7 +94,7 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
                 else -> "lastUpdated"
             }
 
-            loadStores(region, minRating, sortBy)
+            loadStores(address, minRating, sortBy)
         }
     }
 
@@ -127,7 +127,7 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_store, null)
         
         val etName = dialogView.findViewById<EditText>(R.id.etName)
-        val etRegion = dialogView.findViewById<EditText>(R.id.etRegion)
+        //val etRegion = dialogView.findViewById<EditText>(R.id.etRegion)
         val etLink = dialogView.findViewById<EditText>(R.id.etLink)
         val etDesc = dialogView.findViewById<EditText>(R.id.etDesc)
         val etAddress = dialogView.findViewById<EditText>(R.id.etAddress)
@@ -162,14 +162,15 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
             .setView(dialogView)
             .setPositiveButton("등록") { _, _ ->
                 val name = etName.text.toString()
-                val region = etRegion.text.toString()
+                //val region = etRegion.text.toString()
+                val address = etAddress.text.toString()
                 val link = etLink.text.toString()
                 val desc = etDesc.text.toString()
                 val lat = etLat.text.toString().toDoubleOrNull() ?: 0.0
                 val long = etLng.text.toString().toDoubleOrNull() ?: 0.0
 
                 if (name.isNotEmpty()) {
-                    val newStore = Store(id = name, name = name, region = region, mapLink = link, description = desc, latitude = lat, longitude = long)
+                    val newStore = Store(id = name, name = name, address = address, mapLink = link, description = desc, latitude = lat, longitude = long)
                     repository.uploadStoreInfo(newStore, {
                         Toast.makeText(requireContext(), "등록 성공!", Toast.LENGTH_SHORT).show()
                         loadStores() // 목록 새로고침
@@ -252,10 +253,10 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
     }
 
 
-    private fun loadStores(region: String? = null, minRating: Float? = null, sortBy: String = "lastUpdated") {
+    private fun loadStores(address: String? = null, minRating: Float? = null, sortBy: String = "lastUpdated") {
         // 매개변수 이름을 직접 지정하여 호출 (Named Arguments)
         repository.getFilteredStores(
-            region = region,
+            address = address,
             minRating = minRating,
             minStock = null, // 이제 Repository에 추가했으므로 에러가 나지 않습니다.
             sortBy = sortBy
