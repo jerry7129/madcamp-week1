@@ -11,11 +11,12 @@ val properties = Properties().apply {
     load(FileInputStream(rootProject.file("local.properties")))
 }
 
+val naverKey = properties.getProperty("NAVERMAP_CLIENT_ID") ?: ""
+val kakaoKey = properties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+
 android {
     namespace = "com.example.cafemap"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.cafemap"
@@ -25,7 +26,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        addManifestPlaceholders(mapOf("NAVERMAP_CLIENT_ID" to properties.getProperty("NAVERMAP_CLIENT_ID")))
+        
+        // BuildConfig에 카카오 키 추가
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
+        
+        // Manifest에서 사용하기 위한 Placeholder 설정
+        addManifestPlaceholders(mapOf(
+            "NAVERMAP_CLIENT_ID" to naverKey,
+            "KAKAO_NATIVE_APP_KEY" to kakaoKey
+        ))
     }
 
     buildTypes {
@@ -65,6 +74,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
+    
+    // Kakao Login SDK
+    implementation(libs.kakao.user)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

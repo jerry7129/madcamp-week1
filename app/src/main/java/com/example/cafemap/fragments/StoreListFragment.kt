@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cafemap.MainActivity
 import com.example.cafemap.R
 import com.example.cafemap.Store
 import com.example.cafemap.StoreAdapter
@@ -29,6 +30,9 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
     private lateinit var fabOpen: Animation
     private lateinit var fabClose: Animation
 
+    // ✨ 클래스 멤버 변수로 선언하여 onResume 및 onHiddenChanged에서 접근 가능하게 함
+    private var fabMain: FloatingActionButton? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,13 +46,16 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         val btnApply = view.findViewById<Button>(R.id.btnApplyFilter)
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvStoreList)
 
-        val fabMain = view.findViewById<FloatingActionButton>(R.id.fabMain)
+        fabMain = view.findViewById<FloatingActionButton>(R.id.fabMain)
         val fabAddStore = view.findViewById<FloatingActionButton>(R.id.fabAddStore)
         val fabUpdateStock = view.findViewById<FloatingActionButton>(R.id.fabUpdateStock)
         val fabDeleteStore = view.findViewById<FloatingActionButton>(R.id.fabDeleteStore)
 
-        fabMain.setOnClickListener {
-            toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
+        // ✨ 로그인 여부에 따라 관리 메뉴(FAB) 노출 제어
+        updateFabVisibility()
+
+        fabMain?.setOnClickListener {
+            fabMain?.let { toggleFab(it, fabAddStore, fabUpdateStock, fabDeleteStore) }
         }
 
 
@@ -57,19 +64,19 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         fabAddStore.setOnClickListener {
             Toast.makeText(requireContext(), "가게 추가 팝업 열기", Toast.LENGTH_SHORT).show() //필요?
             showAddStoreDialog() // 함수 호출
-            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
+            fabMain?.let { if (isFabOpen) toggleFab(it, fabAddStore, fabUpdateStock, fabDeleteStore) }
         }
 
         fabDeleteStore.setOnClickListener {
             Toast.makeText(requireContext(), "가게 삭제 팝업 열기", Toast.LENGTH_SHORT).show() //필요?
             showDeleteStoreDialog() // 함수 호출
-            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
+            fabMain?.let { if (isFabOpen) toggleFab(it, fabAddStore, fabUpdateStock, fabDeleteStore) }
         }
 
         fabUpdateStock.setOnClickListener {
             Toast.makeText(requireContext(), "재고 수정 팝업 열기", Toast.LENGTH_SHORT).show() //필요?
             showUpdateStockDialog() // 함수 호출
-            if (isFabOpen) toggleFab(fabMain, fabAddStore, fabUpdateStock, fabDeleteStore)
+            fabMain?.let { if (isFabOpen) toggleFab(it, fabAddStore, fabUpdateStock, fabDeleteStore) }
         }
 
         // 리사이클러뷰 초기화
@@ -95,6 +102,31 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
             }
 
             loadStores(address, minRating, sortBy)
+        }
+    }
+
+    // ✨ 프래그먼트가 show/hide 될 때 호출되는 함수 (MainActivity의 show/hide 대응)
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            // 프래그먼트가 다시 나타날 때(show) 버튼 가시성 업데이트
+            updateFabVisibility()
+        }
+    }
+
+    // ✨ 화면에 다시 돌아올 때마다(탭 전환 등) 로그인 상태를 체크하여 가시성 업데이트
+    override fun onResume() {
+        super.onResume()
+        updateFabVisibility()
+    }
+
+    private fun updateFabVisibility() {
+        if (MainActivity.isLoggedIn) {
+            fabMain?.visibility = View.VISIBLE
+        } else {
+            fabMain?.visibility = View.GONE
+            // 로그아웃 상태에서 메뉴가 열려 있었다면 닫기 처리
+            isFabOpen = false
         }
     }
 
