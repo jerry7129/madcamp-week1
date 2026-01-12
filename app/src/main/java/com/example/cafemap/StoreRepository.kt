@@ -118,7 +118,7 @@ class StoreRepository {
     }
 
     fun getFilteredStores(
-        region: String? = null,
+        address: String? = null,
         minRating: Float? = null,
         minStock: Int? = null, // 이 부분이 있는지 확인하고 추가하세요!
         sortBy: String = "lastUpdated",
@@ -126,9 +126,7 @@ class StoreRepository {
     ) {
         var query: Query = storeRef
 
-        if (!region.isNullOrEmpty()) {
-            query = query.whereEqualTo("region", region)
-        }
+        // 1. 서버 측 필터링 (숫자 데이터 위주)
         if (minRating != null) {
             query = query.whereGreaterThanOrEqualTo("avgRating", minRating)
         }
@@ -137,17 +135,26 @@ class StoreRepository {
             query = query.whereGreaterThanOrEqualTo("stockCount", minStock)
         }
 
+        // 정렬 순서 적용
         query = when (sortBy) {
             "rating" -> query.orderBy("avgRating", Query.Direction.DESCENDING)
             "stock" -> query.orderBy("stockCount", Query.Direction.DESCENDING)
             else -> query.orderBy("lastUpdated", Query.Direction.DESCENDING)
         }
 
-        // 데이터가 1초만에 사라지는 것을 방지하기 위해 .get() 사용 권장
         query.get()
             .addOnSuccessListener { snapshot ->
                 val stores = snapshot.toObjects(Store::class.java)
-                onResult(stores)
+
+                // 2. 클라이언트 측 필터링 (주소 "포함" 검색)
+                val finalResult = if (!address.isNullOrEmpty()) {
+                    // address가 포함된(contains) 데이터만 필터링
+                    stores.filter { it.address.contains(address, ignoreCase = true) }
+                } else {
+                    stores
+                }
+
+                onResult(finalResult)
             }
             .addOnFailureListener { onResult(emptyList()) }
     }

@@ -11,7 +11,8 @@ data class Store(
     val name: String = "",          // 가게 등록 시 입력 필수 사항 or 네이버 지도에서 선택 시 자동으로 할당
     val mapLink: String = "",       // 가게 등록 시 입력 필수 사항 or 네이버 지도에서 선택 시 자동으로 할당
     val description: String = "",   // 가게 등록 시 입력 선택 사항
-    val region: String = "",        // 가게 등록 시 입력 필수 사항 or 네이버 지도에서 선택 시 자동으로 할당
+    //val region: String = "",        // 가게 등록 시 입력 필수 사항 or 네이버 지도에서 선택 시 자동으로 할당
+    val address: String = "",
     var stockCount: Int = 0,
     var stockStatus: StockStatus = StockStatus.OUT_OF_STOCK,
     var lastUpdated: Long = System.currentTimeMillis(),

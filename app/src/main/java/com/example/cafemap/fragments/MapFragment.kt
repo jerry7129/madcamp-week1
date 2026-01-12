@@ -218,7 +218,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val query = etSearch?.text.toString().trim()
         if (query.isNotEmpty()) {
             val filtered = currentStores.filter {
-                it.name.contains(query, ignoreCase = true) || it.region.contains(query, ignoreCase = true)
+                it.name.contains(query, ignoreCase = true) || it.address.contains(query, ignoreCase = true)
             }
             if (filtered.isNotEmpty()) {
                 showSearchResults(filtered)
@@ -347,7 +347,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val tvName: TextView = view.findViewById(R.id.tv_result_name)
-            val tvRegion: TextView = view.findViewById(R.id.tv_result_region)
+            val tvAddress: TextView = view.findViewById(R.id.tv_result_address)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -358,7 +358,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val store = stores[position]
             holder.tvName.text = store.name
-            holder.tvRegion.text = store.region
+            holder.tvAddress.text = store.address
             holder.itemView.setOnClickListener { onClick(store) }
         }
 

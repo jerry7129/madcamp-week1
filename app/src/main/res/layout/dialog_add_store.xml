@@ -24,12 +24,6 @@
             android:hint="가게 이름" />
 
         <EditText
-            android:id="@+id/etRegion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="지역 (예: 서울)" />
-
-        <EditText
             android:id="@+id/etLink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

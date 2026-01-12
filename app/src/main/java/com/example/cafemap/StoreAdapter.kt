@@ -10,7 +10,8 @@ class StoreAdapter(private var stores: List<Store>, private val onItemClick: (St
 
     class StoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tvStoreName)
-        val region: TextView = view.findViewById(R.id.tvStoreRegion)
+        val address: TextView = view.findViewById(R.id.tvStoreAddress)
+        //val region: TextView = view.findViewById(R.id.tvStoreRegion)
         val rating: TextView = view.findViewById(R.id.tvRating)
         val reviewcount: TextView = view.findViewById(R.id.tvRatingCount)
         val stock: TextView = view.findViewById(R.id.tvStock)
@@ -26,7 +27,7 @@ class StoreAdapter(private var stores: List<Store>, private val onItemClick: (St
     override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
         val store = stores[position]
         holder.name.text = store.name
-        holder.region.text = store.region
+        holder.address.text = store.address
         holder.rating.text = "⭐ ${String.format("%.1f", store.avgRating)}"
         holder.reviewcount.text = "(${store.reviewCount})"
         holder.stock.text = "재고: ${store.stockCount}개"
