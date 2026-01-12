@@ -11,11 +11,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
 import com.example.cafemap.R
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class StoreDetailFragment : DialogFragment() {
 
@@ -56,6 +54,7 @@ class StoreDetailFragment : DialogFragment() {
 
         val tvName = view.findViewById<TextView>(R.id.tvDetailName)
         val tvDescription = view.findViewById<TextView>(R.id.tvDetailDescription)
+        val cvStockStatusBadge = view.findViewById<CardView>(R.id.cvStockStatusBadge)
         val tvStockStatus = view.findViewById<TextView>(R.id.tvDetailStockStatus)
         val tvStockCount = view.findViewById<TextView>(R.id.tvDetailStockCount)
         val tvLastUpdated = view.findViewById<TextView>(R.id.tvDetailLastUpdated)
@@ -71,13 +70,15 @@ class StoreDetailFragment : DialogFragment() {
             val mapLink = it.getString("mapLink") ?: ""
 
             tvName.text = name
+            tvName.isSelected = true
+            // description box에서 큰 따옴표 제거
             tvDescription.text = description
-            
+
             // 상태 텍스트 설정
             tvStockStatus.text = getStockStatusText(stockStatus)
-            // 상태에 따른 색상 설정
-            updateStockBadgeStyle(tvStockStatus, stockStatus)
-            
+            // 상태에 따른 배지(CardView) 색상 및 텍스트 색상 설정
+            updateStockBadgeStyle(cvStockStatusBadge, tvStockStatus, stockStatus)
+
             tvStockCount.text = "• ${stockCount}개 남음"
             tvLastUpdated.text = "● ${formatTime(lastUpdated)} 업데이트"
 
@@ -94,16 +95,16 @@ class StoreDetailFragment : DialogFragment() {
         }
     }
 
-    private fun updateStockBadgeStyle(textView: TextView, status: String) {
+    private fun updateStockBadgeStyle(badge: CardView, textView: TextView, status: String) {
         val (bgColor, textColor) = when (status) {
             "OUT_OF_STOCK" -> "#E0E0E0" to "#757575"  // 품절: 회색
-            "LOW" -> "#FFEBEB" to "#FF4D4D"           // 부족/임박: 연한 빨강
+            "LOW" -> "#FFEBEB" to "#FF4D4D"           // 부족: 연한 빨강
             "NORMAL" -> "#FFF3E0" to "#FF9800"        // 보통: 연한 주황
             "PLENTY" -> "#E8F5E9" to "#4CAF50"        // 여유: 연한 초록
             else -> "#F5F5F5" to "#9E9E9E"
         }
-        
-        textView.backgroundTintList = ColorStateList.valueOf(Color.parseColor(bgColor))
+
+        badge.setCardBackgroundColor(Color.parseColor(bgColor))
         textView.setTextColor(Color.parseColor(textColor))
     }
 
@@ -125,8 +126,8 @@ class StoreDetailFragment : DialogFragment() {
 
         return when {
             minutes < 1 -> "방금 전"
-            minutes < 60 -> "${minutes}분 전"
-            hours < 24 -> "${hours}시간 전"
+            minutes < 60 -> "약 ${minutes}분 전"
+            hours < 24 -> "약 ${hours}시간 전"
             else -> "${days}일 전"
         }
     }

@@ -5,10 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import android.content.res.ColorStateList
-import android.graphics.Color
-import androidx.core.content.ContextCompat
-import com.example.cafemap.Store           // 'Store' 클래스 인식용
 
 class StoreAdapter(private var stores: List<Store>, private val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
@@ -39,7 +35,7 @@ class StoreAdapter(private var stores: List<Store>, private val onItemClick: (St
             store.stockCount <= 0 -> "품절" to "#9E9E9E"  // 회색
             store.stockCount <= 5 -> "부족" to "#FF5252"  // 빨강
             store.stockCount <= 15 -> "보통" to "#FFAB40" // 주황
-            else -> "풍부" to "#4CAF50"                   // 초록
+            else -> "여유" to "#4CAF50"                   // 초록
         }
         holder.stockStatus.apply {
             text = statusText
@@ -65,8 +61,8 @@ class StoreAdapter(private var stores: List<Store>, private val onItemClick: (St
 
         return when {
             diff < 60_000 -> "방금 전"
-            diff < 3_600_000 -> "${diff / 60_000}분 전"
-            diff < 86_400_000 -> "${diff / 3_600_000}시간 전"
+            diff < 3_600_000 -> "약 ${diff / 60_000}분 전"
+            diff < 86_400_000 -> "약 ${diff / 3_600_000}시간 전"
             else -> "${diff / 86_400_000}일 전"
         }
     }

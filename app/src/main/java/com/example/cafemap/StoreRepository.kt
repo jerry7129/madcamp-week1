@@ -1,10 +1,9 @@
 package com.example.cafemap
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query // 정렬 및 필터링을 위해 필수
-import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects // 리스트 변환을 위해 필수? Gemini 피셜
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
+import kotlin.math.roundToInt
 
 class StoreRepository {
     private val db = FirebaseFirestore.getInstance()
@@ -85,7 +84,7 @@ class StoreRepository {
 
             val newReviewCount = currentReviewCount + 1
             val totalScore = (currentAvgRating * currentReviewCount) + newRating
-            val newAvgRating = Math.round((totalScore / newReviewCount) * 10f) / 10f
+            val newAvgRating = ((totalScore / newReviewCount) * 10f).roundToInt() / 10f
 
             // 3. 데이터 쓰기 (Write)
             transaction.update(storeDocRef, "avgRating", newAvgRating)

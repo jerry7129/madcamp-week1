@@ -42,16 +42,23 @@
                 android:src="@drawable/ic_launcher_background" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Store Name -->
+        <!-- Store Name (Marquee effect for long names) -->
         <TextView
             android:id="@+id/tvDetailName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:text="가게 이름"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintTop_toTopOf="@id/cvStoreImage"
             app:layout_constraintStart_toEndOf="@id/cvStoreImage"
             app:layout_constraintEnd_toStartOf="@id/btnCloseDetail" />
