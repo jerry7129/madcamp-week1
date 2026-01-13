@@ -25,27 +25,61 @@
 
 ## 🛠️ 기술 스택 (Tech Stack)
 
-| 구분 | 기술 (Stack) |
+### 🎨 Frontend (Android)
+| 구분 | 상세 내용 (Details) |
 | :---: | :--- |
-| **Language** | <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=Kotlin&logoColor=white"/> |
-| **IDE** | <img src="https://img.shields.io/badge/Android Studio-3DDC84?style=flat&logo=Android Studio&logoColor=white"/> |
-| **Backend / DB** | <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=Firebase&logoColor=black"/> <img src="https://img.shields.io/badge/Firestore-FFCA28?style=flat&logo=Firebase&logoColor=black"/> |
-| **Map API** | <img src="https://img.shields.io/badge/Naver Maps-03C75A?style=flat&logo=Naver&logoColor=white"/> |
-| **Library** | <img src="https://img.shields.io/badge/Glide-181717?style=flat&logo=Glide&logoColor=white"/> <img src="https://img.shields.io/badge/Credential Manager-4285F4?style=flat&logo=Google&logoColor=white"/> |
-| **Collaboration** | <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=Git&logoColor=white"/> |
+| **Language** | <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=Kotlin&logoColor=white"/> **(Coroutines)**<br>- 비동기 처리를 위한 코루틴 활용 |
+| **UI / UX** | <img src="https://img.shields.io/badge/Material%20Design%203-757575?style=flat&logo=materialdesign&logoColor=white"/> <img src="https://img.shields.io/badge/Android%20Jetpack-4285F4?style=flat&logo=android&logoColor=white"/><br>- **Theme:** "Warm Cafe" (Brown & Beige Palette)<br>- **Navigation:** Fragment-based (Show/Hide Pattern)<br>- **Jetpack:** Fragment KTX, Lifecycle, ViewBinding |
+| **Security** | <img src="https://img.shields.io/badge/API%20Security-4CAF50?style=flat&logo=android&logoColor=white"/><br>- `local.properties` & `BuildConfig`를 활용한 API Key 관리 |
+
+<br>
+
+### 📍 Map & Location
+| 구분 | 상세 내용 (Details) |
+| :---: | :--- |
+| **Map SDK** | <img src="https://img.shields.io/badge/Naver%20Maps-03C75A?style=flat&logo=Naver&logoColor=white"/> **(v3.23.0)**<br>- 커스텀 마커 배지 구현 (Elevation & Shadow 적용)<br>- 실시간 재고량 시각화 (Color Coded Markers) |
+| **Location** | <img src="https://img.shields.io/badge/Google%20Location-4285F4?style=flat&logo=googlemaps&logoColor=white"/><br>- Google Play Services Location (`FusedLocationSource`) |
+
+<br>
+
+### ☁️ Backend & Authentication
+| 구분 | 상세 내용 (Details) |
+| :---: | :--- |
+| **Platform** | <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=Firebase&logoColor=black"/> |
+| **Database** | <img src="https://img.shields.io/badge/Cloud%20Firestore-FFCA28?style=flat&logo=Firebase&logoColor=black"/><br>- `SnapshotListener`를 활용한 실시간 재고 동기화 |
+| **Auth** | <img src="https://img.shields.io/badge/Credential%20Manager-4285F4?style=flat&logo=Google&logoColor=white"/> <img src="https://img.shields.io/badge/Kakao%20Login-FFCD00?style=flat&logo=KakaoTalk&logoColor=black"/><br>- **Google:** Android 최신 Credential Manager API 적용<br>- **Kakao:** Kakao SDK v2 (카카오싱크 대응)<br>- **Guest:** 익명 인증을 통한 관리자 모드 체험 기능 |
 
 <br>
 
 ## 📱 주요 기능 (Key Features)
 
-| 1. 지도 & 재고 확인 | 2. 카페 검색 & 리스트 | 3. 사장님 모드 (재고 관리) |
+| 1. 실시간 재고 지도 | 2. 검색 및 리스트 필터 | 3. 관리자 모드 |
 | :---: | :---: | :---: |
-| <img src="https://via.placeholder.com/200x400?text=Map+Screen" width="200" /> | <img src="https://via.placeholder.com/200x400?text=Search+Screen" width="200" /> | <img src="https://via.placeholder.com/200x400?text=Admin+Screen" width="200" /> |
-| **실시간 재고 마커 표시**<br>재고 수량에 따라 마커 색상 변경<br>(품절: 회색, 여유: 초록) | **지역/카페명 검색**<br>원하는 카페를 리스트로 확인하고<br>지도 위치로 바로 이동 | **실시간 재고 수정**<br>사장님 권한으로 로그인 시<br>간편하게 재고 수량 업데이트 |
+| <img src="https://via.placeholder.com/200x400?text=Map+Screen" width="200" /> | <img src="https://via.placeholder.com/200x400?text=Search+List" width="200" /> | <img src="https://via.placeholder.com/200x400?text=Admin+Login" width="200" /> |
+| **지도 & 내 위치 추적**<br>실시간 마커 배지 확인<br>Follow 모드로 주변 탐색 | **스마트 검색 & 정렬**<br>지역/카페명 검색 및 이동<br>별점/재고순 필터링 | **가게 및 재고 관리**<br>소셜 로그인 권한 획득<br>실시간 수량 업데이트 |
 
-* **Tab 1 (Map):** 네이버 지도 API를 활용하여 사용자 위치 기반으로 카페 마커를 표시합니다. `OverlayImage`와 `ShapeDrawable`을 활용해 재고 상태를 직관적인 UI로 표현했습니다.
-* **Tab 2 (Search):** 등록된 카페 리스트를 검색하고, 상세 정보를 확인할 수 있습니다.
-* **Feature (Auth):** 구글/카카오 소셜 로그인을 지원하며, `Admin` 권한이 있는 사용자는 카페 등록 요청 및 재고 관리가 가능합니다.
+<br>
+
+### 🗺️ 1. 실시간 재고 지도 (Real-time Map)
+* **네이버 지도 연동:** 네이버 지도를 기반으로 카페 위치를 직관적인 마커로 표시합니다.
+* **스마트 배지 (Smart Badge):** 마커 위에 부착된 배지 색상으로 재고 상태를 즉시 파악할 수 있습니다.
+    * 🔴 **Red:** 품절 (Sold Out)
+    * 🟠 **Orange:** 재고 부족 (Low Stock)
+    * 🟢 **Green:** 재고 여유 (Available)
+* **내 위치 추적 (Location Tracking):** 실시간 위치 추적(Follow 모드)을 지원하여 내 주변에 있는 카페를 빠르게 탐색합니다.
+
+### 🔎 2. 스마트 검색 & 리스트 (Search & Filter)
+* **스마트 검색:** 카페 이름이나 '성수동', '강남' 같은 지역명을 검색하면, 지도 카메라가 해당 위치로 즉시 애니메이션 이동합니다.
+* **가게 리스트:** 지도뿐만 아니라 리스트 형태로도 전체 카페 목록을 확인할 수 있습니다.
+* **정렬 및 필터:** 사용자가 원하는 기준으로 카페를 정렬할 수 있습니다.
+    * ⭐ **별점순:** 인기 있는 카페 확인
+    * 📦 **재고순:** 현재 구매 가능한 카페 우선 확인
+    * 🕒 **업데이트순:** 가장 최근 정보를 갱신한 카페 확인
+
+### 🔐 3. 관리자 모드 (Admin Mode)
+* **소셜 로그인 (Social Login):** Google, Kakao 계정을 연동하여 안전하게 관리자 권한을 획득합니다.
+* **가게 관리 (CRUD):** 관리자 권한으로 신규 카페 정보를 추가하거나, 기존 정보를 수정 및 삭제할 수 있습니다.
+* **실시간 재고 수정:** 복잡한 과정 없이 버튼 하나로 실시간 재고 수량을 업데이트하여 사용자들에게 최신 정보를 제공합니다.
 
 <br>
 
