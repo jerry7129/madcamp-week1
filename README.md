@@ -9,8 +9,8 @@
 
 | 이름 (Name) | 역할 (Role) | 학교/학과 (Affiliation) | GitHub |
 | :---: | :---: | :---: | :---: |
-| **김승관** | Android Developer<br>(Map, UI/UX) | 한양대학교<br>컴퓨터소프트웨어학부 | [@jerry7129](https://github.com/jerry7129) |
-| **김현우** | Android Developer<br>(Firebase, Auth) | [학교/학과 입력] | [@GithubID](https://github.com/GithubID) |
+| **김승관** | Android Developer<br>(Map, UI/UX, Auth) | 한양대학교<br>컴퓨터소프트웨어학부 | [@jerry7129](https://github.com/jerry7129) |
+| **김현우** | Android Developer<br>(Firebase) | [학교/학과 입력] | [@GithubID](https://github.com/GithubID) |
 
 <br>
 
