@@ -2,8 +2,20 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.CafeMap" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/background_mint</item>
+        
+        <!-- 하단 탭 바 통일 -->
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
     </style>
 
     <style name="Theme.CafeMap" parent="Base.Theme.CafeMap" />
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="backgroundTint">@color/white</item>
+        <item name="itemIconTint">@color/selector_bottom_nav</item>
+        <item name="itemTextColor">@color/selector_bottom_nav</item>
+        <item name="itemRippleColor">@color/background_mint</item>
+    </style>
 </resources>
