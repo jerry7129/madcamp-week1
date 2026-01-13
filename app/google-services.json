@@ -12,7 +12,20 @@
           "package_name": "com.example.cafemap"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "728529107438-isjb8is2c08djne4bissq4kjcbehgdec.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cafemap",
+            "certificate_hash": "7a051d6408b76279392a4c5e1342bc4126323e35"
+          }
+        },
+        {
+          "client_id": "728529107438-tauohob0i9jl8t72urf21ng8svbq5rod.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBnctYKen6L3VO0bHLE74G8jFC3j9Th0g0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728529107438-tauohob0i9jl8t72urf21ng8svbq5rod.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -31,7 +49,12 @@
           "package_name": "com.madcamp.doojjonkoo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "728529107438-tauohob0i9jl8t72urf21ng8svbq5rod.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBnctYKen6L3VO0bHLE74G8jFC3j9Th0g0"
@@ -39,7 +62,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728529107438-tauohob0i9jl8t72urf21ng8svbq5rod.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

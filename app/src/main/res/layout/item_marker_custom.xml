@@ -11,6 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/bg_marker_main"
+        android:elevation="4dp"
         android:clipToOutline="true"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
@@ -21,9 +22,12 @@
 
     <TextView
         android:id="@+id/tvMarkerStockBadge"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:minWidth="28dp"
+        android:paddingHorizontal="6dp"
         android:background="@drawable/bg_marker_badge"
+        android:elevation="6dp"
         android:gravity="center"
         android:text="0"
         android:textColor="#FFFFFF"
