@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
 import com.example.cafemap.R
+import com.bumptech.glide.Glide
 
 class StoreDetailFragment : DialogFragment() {
 
@@ -24,7 +25,8 @@ class StoreDetailFragment : DialogFragment() {
             stockStatus: String,
             stockCount: Int,
             lastUpdated: Long,
-            mapLink: String
+            mapLink: String,
+            imageUrl: String // ✨ 추가
         ): StoreDetailFragment {
             val fragment = StoreDetailFragment()
             val args = Bundle()
@@ -34,6 +36,7 @@ class StoreDetailFragment : DialogFragment() {
             args.putInt("stockCount", stockCount)
             args.putLong("lastUpdated", lastUpdated)
             args.putString("mapLink", mapLink)
+            args.putString("imageUrl", imageUrl) // ✨ 추가
             fragment.arguments = args
             return fragment
         }
@@ -60,6 +63,9 @@ class StoreDetailFragment : DialogFragment() {
         val tvLastUpdated = view.findViewById<TextView>(R.id.tvDetailLastUpdated)
         val btnClose = view.findViewById<ImageView>(R.id.btnCloseDetail)
         val btnNaverPlace = view.findViewById<Button>(R.id.btnNaverPlace)
+        val ivStoreImage = view.findViewById<ImageView>(R.id.ivStoreImage)
+
+
 
         arguments?.let {
             val name = it.getString("name") ?: ""
@@ -68,6 +74,16 @@ class StoreDetailFragment : DialogFragment() {
             val stockCount = it.getInt("stockCount")
             val lastUpdated = it.getLong("lastUpdated")
             val mapLink = it.getString("mapLink") ?: ""
+            val imageUrl = it.getString("imageUrl") ?: ""
+
+            if (imageUrl.isNotEmpty()) {
+                Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.ic_marker_test) // 로딩 중 이미지
+                    .into(ivStoreImage) // 이미지뷰에 표시
+            } else {
+                ivStoreImage.visibility = View.GONE // 이미지가 없으면 숨김
+            }
 
             tvName.text = name
             tvName.isSelected = true

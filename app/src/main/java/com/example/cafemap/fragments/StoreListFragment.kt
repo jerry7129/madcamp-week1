@@ -21,6 +21,13 @@ import com.example.cafemap.StoreAdapter
 import com.example.cafemap.StoreRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Locale
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.storage.FirebaseStorage
+import android.widget.ImageView
+import android.content.Intent
+import java.io.File
+import java.io.FileOutputStream
 
 class StoreListFragment : Fragment(R.layout.fragment_store_list) {
     private val repository = StoreRepository()
@@ -32,6 +39,45 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
 
     // ✨ 클래스 멤버 변수로 선언하여 onResume 및 onHiddenChanged에서 접근 가능하게 함
     private var fabMain: FloatingActionButton? = null
+
+    private var selectedImageUri: Uri? = null // 선택한 이미지 URI 저장용
+    private var ivPreview: ImageView? = null // 다이얼로그 내 미리보기용
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            // 선택하자마자 즉시 캐시 파일로 복사하여 영구적인 내부 URI를 생성함
+            val internalUri = copyUriToInternalStorage(it)
+            if (internalUri != null) {
+                selectedImageUri = internalUri
+                ivPreview?.apply {
+                    visibility = View.VISIBLE
+                    setImageURI(internalUri)
+                }
+            } else {
+                Toast.makeText(requireContext(), "이미지 로드 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun copyUriToInternalStorage(uri: Uri): Uri? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            // 파일명이 중복되지 않도록 타임스탬프 사용 추천
+            val tempFile = File(requireContext().cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
+            val outputStream = FileOutputStream(tempFile)
+
+            inputStream?.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            Uri.fromFile(tempFile)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -166,7 +212,17 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
         val btnSearchAddress = dialogView.findViewById<Button>(R.id.btnSearchAddress)
         val etLat = dialogView.findViewById<EditText>(R.id.etDialogLatitude)
         val etLng = dialogView.findViewById<EditText>(R.id.etDialogLongtitude)
+        val btnSelectImage = dialogView.findViewById<Button>(R.id.btnSelectImage)
 
+        // 중요: 현재 다이얼로그의 ivPreview를 전역 변수에 할당
+        ivPreview = dialogView.findViewById<ImageView>(R.id.ivDialogPreview)
+
+        // 이전에 선택했던 이미지 정보 초기화 (새 다이얼로그니까)
+        selectedImageUri = null
+
+        btnSelectImage.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
         // 주소 검색 버튼 클릭 시 위도/경도 자동 입력 로직
         btnSearchAddress.setOnClickListener {
             val address = etAddress.text.toString()
@@ -192,27 +248,92 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
 
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setView(dialogView)
-            .setPositiveButton("등록") { _, _ ->
-                val name = etName.text.toString()
-                //val region = etRegion.text.toString()
-                val address = etAddress.text.toString()
-                val link = etLink.text.toString()
-                val desc = etDesc.text.toString()
-                val lat = etLat.text.toString().toDoubleOrNull() ?: 0.0
-                val long = etLng.text.toString().toDoubleOrNull() ?: 0.0
-
-                if (name.isNotEmpty()) {
-                    val newStore = Store(id = name, name = name, address = address, mapLink = link, description = desc, latitude = lat, longitude = long)
-                    repository.uploadStoreInfo(newStore, {
-                        Toast.makeText(requireContext(), "등록 성공!", Toast.LENGTH_SHORT).show()
-                        loadStores() // 목록 새로고침
-                    }, {
-                        Toast.makeText(requireContext(), "실패: ${it.message}", Toast.LENGTH_SHORT).show()
-                    })
-                }
-            }
+            .setPositiveButton("등록", null) // 나중에 아래에서 listener를 다시 설정함 (다이얼로그 닫힘 방지)
             .setNegativeButton("취소", null)
-        builder.show()
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+
+        // 등록 버튼 클릭 시 바로 닫히지 않게 커스텀 리스너 설정
+        alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            //android.util.Log.d("FirebaseDB", "1. 등록 버튼 클릭됨") // <- 추가
+            val name = etName.text.toString().trim()
+            val address = etAddress.text.toString().trim()
+            val link = etLink.text.toString().trim()
+            val desc = etDesc.text.toString().trim()
+            val lat = etLat.text.toString().toDoubleOrNull() ?: 0.0
+            val long = etLng.text.toString().toDoubleOrNull() ?: 0.0
+
+            if (name.isEmpty()) {
+                //android.util.Log.d("FirebaseDB", "2. 이름이 비어있음") // <- 추가
+                etName.error = "가게 이름을 입력하세요"
+                return@setOnClickListener
+            }
+
+            //android.util.Log.d("FirebaseDB", "3. 이미지 URI 상태: $selectedImageUri") // <- 추가
+
+            // 버튼 비활성화 (중복 클릭 방지)
+            alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            Toast.makeText(requireContext(), "등록 중입니다...", Toast.LENGTH_SHORT).show()
+
+            if (selectedImageUri != null) {
+                val finalUploadUri = getFileUriFromGalleryUri(selectedImageUri!!)
+                //android.util.Log.d("FirebaseDB", "4. 변환된 URI: $finalUploadUri") // <- 추가
+                if (finalUploadUri != null) {
+                    repository.uploadImage(
+                        storeId = name,
+                        imageUri = selectedImageUri!!,  //finalUploadUri로 수정?
+                        onSuccess = { imageUrl ->
+                            //android.util.Log.d("FirebaseDB", "5. 업로드 성공 URL: $imageUrl")
+                            val newStore = Store(
+                                id = name, name = name, address = address,
+                                mapLink = link, description = desc,
+                                latitude = lat, longitude = long,
+                                imageUrl = imageUrl
+                            )
+                            //android.util.Log.d("FirebaseDB", "5. 객체에 담긴 URL: ${newStore.imageUrl}")
+                            repository.uploadStoreInfo(
+                                store = newStore,
+                                onSuccess = {
+                                    Toast.makeText(requireContext(), "등록 성공!", Toast.LENGTH_SHORT).show()
+                                    loadStores()
+                                    alertDialog.dismiss() // 성공했을 때만 닫기
+                                },
+                                onFailure = { e ->
+                                    alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                                    Toast.makeText(requireContext(), "정보 등록 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        },
+                        onFailure = { e ->
+                            alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                            Toast.makeText(requireContext(), "이미지 업로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                } else {
+                    Toast.makeText(requireContext(), "파일 처리 오류", Toast.LENGTH_SHORT).show()
+                    alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                }
+            } else {
+                val newStore = Store(
+                    id = name, name = name, address = address,
+                    mapLink = link, description = desc,
+                    latitude = lat, longitude = long, imageUrl = ""
+                )
+                repository.uploadStoreInfo(
+                    store = newStore,
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "등록 성공!", Toast.LENGTH_SHORT).show()
+                        loadStores()
+                        alertDialog.dismiss()
+                    },
+                    onFailure = { e ->
+                        alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                        Toast.makeText(requireContext(), "등록 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+        }
     }
 
     private fun showDeleteStoreDialog() {
@@ -223,12 +344,17 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
                 val delId = dialogView.findViewById<EditText>(R.id.etDeleteStoreId).text.toString()
 
                 if (delId.isNotEmpty()) {
-                    repository.deleteStore(storeId = delId, onSuccess = {
-                        Toast.makeText(requireContext(), "삭제 성공!", Toast.LENGTH_SHORT).show()
-                        loadStores()
-                    }, onFailure = {
-                        Toast.makeText(requireContext(), "실패: ${it.message}", Toast.LENGTH_SHORT).show()
-                    })
+                    repository.deleteStore(
+                        storeId = delId,
+                        onSuccess = {
+                            Toast.makeText(requireContext(), "삭제 성공!", Toast.LENGTH_SHORT).show()
+                            loadStores() // 성공 시 목록 새로고침
+                        },
+                        onFailure = { exception ->
+                            Toast.makeText(requireContext(), "실패: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+
                 }
             }
             .setNegativeButton("취소", null)
@@ -281,6 +407,24 @@ class StoreListFragment : Fragment(R.layout.fragment_store_list) {
             stock.isClickable = true
             delete.isClickable = true
             isFabOpen = true
+        }
+    }
+    private fun getFileUriFromGalleryUri(uri: Uri): Uri? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            // 앱의 캐시 디렉토리에 temp_upload.jpg라는 이름으로 저장
+            val tempFile = File(requireContext().cacheDir, "temp_upload.jpg")
+            val outputStream = FileOutputStream(tempFile)
+
+            inputStream?.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            Uri.fromFile(tempFile)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 

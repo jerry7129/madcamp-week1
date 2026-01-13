@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    id("kotlin-kapt") // 이 줄을 추가하세요.
 }
 
 val properties = Properties().apply {
@@ -17,7 +18,9 @@ val googleWebClientId = properties.getProperty("GOOGLE_WEB_CLIENT_ID") ?: ""
 
 android {
     namespace = "com.example.cafemap"
-    compileSdk = 36
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId = "com.example.cafemap"
@@ -27,11 +30,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
+
         // BuildConfig에 키 추가
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
-        
+
         // Manifest에서 사용하기 위한 Placeholder 설정
         addManifestPlaceholders(mapOf(
             "NAVERMAP_CLIENT_ID" to naverKey,
@@ -76,6 +79,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.firebase:firebase-auth")
 
     // Credential Manager

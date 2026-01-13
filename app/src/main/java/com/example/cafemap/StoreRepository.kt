@@ -4,13 +4,19 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import kotlin.math.roundToInt
+import com.google.firebase.storage.FirebaseStorage
+import android.net.Uri
 
 class StoreRepository {
     private val db = FirebaseFirestore.getInstance()
     private val storeRef = db.collection("stores")
+    private val storage = FirebaseStorage.getInstance()
 
     // 1) 가게 기초 정보 업로드 (새로운 문서 생성)
     fun uploadStoreInfo(store: Store, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        // 💡 로그 추가: 현재 저장하려는 객체에 URL이 들어있는지 확인
+        //android.util.Log.d("FirebaseDB", "저장 시도 데이터: $store")
+        //android.util.Log.d("FirebaseDB", "이미지 URL 존재 여부: ${store.imageUrl}")
         // id가 비어있다면 자동 생성된 ID를 할당
         val docRef = if (store.id.isEmpty()) storeRef.document() else storeRef.document(store.id)
         docRef.get().addOnSuccessListener { snapshot ->
@@ -159,6 +165,20 @@ class StoreRepository {
             .addOnFailureListener { onResult(emptyList()) }
     }
 
+    fun uploadImage(storeId: String, imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        //android.util.Log.d("FirebaseDB", "RepositoryFunction1. 입력된 URi: $imageUri")
+        val storageRef = storage.reference.child("store_images/$storeId.jpg")
+        //android.util.Log.d("FirebaseDB", "RepositoryFunction2. 두 번째 URi: $storageRef")
+
+        storageRef.putFile(imageUri)
+            .addOnSuccessListener {
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    onSuccess(uri.toString()) // 성공 시 이미지 URL 전달
+                }.addOnFailureListener { onFailure(it) }
+            }
+            .addOnFailureListener { onFailure(it) }
+    }
+
     // 실시간으로 가게 정보를 감시하는 리스너 추가
     fun listenToStores(onResult: (List<Store>) -> Unit): ListenerRegistration {
         return storeRef.addSnapshotListener { snapshot, e ->
@@ -170,4 +190,6 @@ class StoreRepository {
             onResult(stores)
         }
     }
+
+
 }

@@ -329,7 +329,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             store.stockStatus.name,
             store.stockCount,
             store.lastUpdated,
-            store.mapLink
+            store.mapLink,
+            store.imageUrl // ✨ 이미지 URL 추가 전달
+
         )
         detailFragment.show(childFragmentManager, "store_detail")
         childFragmentManager.executePendingTransactions()
