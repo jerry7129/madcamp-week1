@@ -2,4 +2,19 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- 따뜻한 카페 테마 (Warm Cafe Theme) -->
+    <color name="primary_green">#6F4E37</color> <!-- 커피 브라운 -->
+    <color name="primary_light_green">#A67B5B</color> <!-- 라떼 브라운 -->
+    <color name="background_mint">#FFF9F0</color> <!-- 연한 아이보리 배경 -->
+    <color name="accent_brown">#8B5E3C</color> <!-- 포인트 브라운 -->
+    <color name="card_bg_cream">#FFFFFF</color> <!-- 순백색 카드 -->
+    <color name="text_dark">#3E2723</color> <!-- 진한 초콜릿색 텍스트 -->
+    <color name="text_grey">#8D6E63</color> <!-- 부드러운 갈색 텍스트 -->
+    <color name="divider_grey">#EFEBE9</color>
+
+    <!-- UI 컴포넌트 전용 -->
+    <color name="faq_bg_yellow">#FDF5E6</color> <!-- 베이지색 FAQ -->
+    <color name="support_bg_beige">#F5E6D3</color>
+    <color name="bottom_nav_unselected">#BCAAA4</color>
 </resources>

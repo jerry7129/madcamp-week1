@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F9F7"
+    android:background="@color/background_mint"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             android:src="@android:drawable/ic_menu_manage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#A0A0A0" />
+            app:tint="@color/text_grey" />
 
         <!-- 상단 타이틀 영역 -->
         <LinearLayout
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="사장님 전용"
-                android:textColor="#1A3C34"
+                android:textColor="@color/text_dark"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="카페 맵 재고 관리 페이지"
-                android:textColor="#2D5A4C"
+                android:textColor="@color/primary_green"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -63,6 +63,7 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="30dp"
             app:cardCornerRadius="24dp"
+            app:cardBackgroundColor="@color/card_bg_cream"
             app:cardElevation="2dp"
             app:layout_constraintTop_toBottomOf="@id/ll_header">
 
@@ -70,7 +71,6 @@
                 android:id="@+id/layout_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFCF8"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="24dp">
@@ -79,7 +79,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_google_login"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="48dp"
                     android:layout_marginBottom="12dp"
                     android:background="@drawable/bg_google_login"
                     android:text="Google로 시작하기"
@@ -100,24 +100,11 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/kakao_login_button" />
 
-                <!-- 네이버 로그인 -->
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_naver_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/bg_naver_login"
-                    android:text="네이버로 시작하기 (보류)"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="10dp"
-                    android:background="#F0F0F0" />
+                    android:background="@color/divider_grey" />
 
                 <!-- 게스트 체험하기 -->
                 <androidx.appcompat.widget.AppCompatButton
@@ -127,15 +114,16 @@
                     android:background="@drawable/bg_guest_btn"
                     android:text="✏️ 체험하기 (Guest)"
                     android:textAllCaps="false"
-                    android:textColor="#8B5E3C"
-                    android:textSize="14sp" />
+                    android:textColor="@color/accent_brown"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <!-- FAQ 영역 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:background="#FFF2E0"
+                    android:background="@color/faq_bg_yellow"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="16dp">
@@ -155,7 +143,7 @@
                         android:gravity="center"
                         android:lineSpacingExtra="4dp"
                         android:text="로그인 문제가 있으신가요?\n카카오톡 1:1 문의하기"
-                        android:textColor="#8B5E3C"
+                        android:textColor="@color/accent_brown"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -165,7 +153,6 @@
                 android:id="@+id/layout_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFCF8"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="32dp"
@@ -175,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="내 정보"
-                    android:textColor="#1A3C34"
+                    android:textColor="@color/text_dark"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -185,6 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="admin@cafemap.com"
+                    android:textColor="@color/text_dark"
                     android:textSize="16sp" />
 
                 <TextView
@@ -192,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="관리자 권한이 활성화되었습니다."
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/primary_light_green"
                     android:textStyle="bold" />
 
                 <Button
@@ -200,15 +188,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="30dp"
-                    android:backgroundTint="#F5F5F5"
+                    android:backgroundTint="@color/divider_grey"
                     android:text="로그아웃"
-                    android:textColor="#757575"
+                    android:textColor="@color/text_grey"
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- 하단 푸터 영역 -->
         <LinearLayout
+            android:id="@+id/ll_footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
@@ -222,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="카페맵이 도움이 되셨나요?"
-                android:textColor="#2D5A4C"
+                android:textColor="@color/primary_green"
                 android:textSize="13sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -238,17 +227,17 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- 회사 정보 (텍스트) -->
+        <!-- 제작 정보 (텍스트) -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-            android:text="에이치에스랩(HS lab) | 주소: 경기도 용인시 수지구 광교마을로 83\n대표: 유태준 | 사업자등록번호: 650-23-02229\n© 2025 Dubai Cookie Map. All rights reserved."
+            android:text="제작: 한양대학교 김승관, KAIST 김현우"
             android:textColor="#A0A0A0"
             android:textSize="10sp"
-            app:layout_constraintTop_toBottomOf="@id/cv_login_container"
+            app:layout_constraintTop_toBottomOf="@id/ll_footer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="1" />
 
