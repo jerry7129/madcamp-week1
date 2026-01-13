@@ -4,7 +4,9 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    //id("com.android.application")
     id("com.google.gms.google-services")
+    id("kotlin-kapt") // 이 줄을 추가하세요.
 }
 
 val properties = Properties().apply {
@@ -62,9 +64,12 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:${fragmentVersion}")
     implementation("com.naver.maps:map-sdk:3.23.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

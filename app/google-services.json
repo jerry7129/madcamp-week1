@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:728529107438:android:fbb90a6903eb17141cf6ff",
+        "mobilesdk_app_id": "1:728529107438:android:5b6b5a83dd95f2ba1cf6ff",
         "android_client_info": {
           "package_name": "com.example.cafemap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnctYKen6L3VO0bHLE74G8jFC3j9Th0g0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728529107438:android:fbb90a6903eb17141cf6ff",
+        "android_client_info": {
+          "package_name": "com.madcamp.doojjonkoo"
         }
       },
       "oauth_client": [],

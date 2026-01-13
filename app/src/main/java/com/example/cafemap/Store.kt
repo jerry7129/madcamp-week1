@@ -19,7 +19,8 @@ data class Store(
     var avgRating: Float = 0.0f,
     var reviewCount: Int = 0,
     val latitude: Double = 0.0,
-    val longitude: Double = 0.0
+    val longitude: Double = 0.0,
+    val imageUrl: String = "" // ✨ 추가: 이미지 URL 저장 필드
 ) {
     /*
     fun updateStock(count: Int) {   // StoreRepository에서 구현되고, 여기에선 사용 안 될 수도
