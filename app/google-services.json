@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "728529107438",
-    "project_id": "doojjonkoo-awesome",
-    "storage_bucket": "doojjonkoo-awesome.firebasestorage.app"
+    "project_number": "124237464071",
+    "project_id": "cafemap-e1ce9",
+    "storage_bucket": "cafemap-e1ce9.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:728529107438:android:fbb90a6903eb17141cf6ff",
+        "mobilesdk_app_id": "1:124237464071:android:b750442ff1f95188bbe0a2",
         "android_client_info": {
           "package_name": "com.example.cafemap"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "124237464071-4484l97ofds2attgecbbv2lgegvc28gb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cafemap",
+            "certificate_hash": "0bfc06870fa2122f05b14f5cea7967c2c6eba1d9"
+          }
+        },
+        {
+          "client_id": "124237464071-r6t0k6ur3jif4nrdd8sf37do6vr2ghli.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnctYKen6L3VO0bHLE74G8jFC3j9Th0g0"
+          "current_key": "AIzaSyBpIoHTNC_DReUdVAqhosa5ZD7KnZ0CoYE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124237464071-r6t0k6ur3jif4nrdd8sf37do6vr2ghli.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

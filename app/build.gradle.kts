@@ -4,7 +4,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -13,6 +12,7 @@ val properties = Properties().apply {
 
 val naverKey = properties.getProperty("NAVERMAP_CLIENT_ID") ?: ""
 val kakaoKey = properties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+val googleWebClientId = properties.getProperty("GOOGLE_WEB_CLIENT_ID") ?: ""
 
 android {
     namespace = "com.example.cafemap"
@@ -27,8 +27,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        // BuildConfig에 카카오 키 추가
+        // BuildConfig에 키 추가
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
         
         // Manifest에서 사용하기 위한 Placeholder 설정
         addManifestPlaceholders(mapOf(
@@ -74,7 +75,13 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-    
+    implementation("com.google.firebase:firebase-auth")
+
+    // Credential Manager
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
     // Kakao Login SDK
     implementation(libs.kakao.user)
 
