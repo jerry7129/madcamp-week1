@@ -55,7 +55,7 @@
 
 | 1. 실시간 재고 지도 | 2. 검색 및 리스트 필터 | 3. 관리자 모드 |
 | :---: | :---: | :---: |
-| <img src="https://via.placeholder.com/200x400?text=Map+Screen" width="200" /> | <img src="https://via.placeholder.com/200x400?text=Search+List" width="200" /> | <img src="https://via.placeholder.com/200x400?text=Admin+Login" width="200" /> |
+| <img src="https://github.com/jerry7129/madcamp-week1/blob/c5be786c392d7fdff6f5ace8d032d9eacbf78b4c/readme_image/cafemap_tap1.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/c5be786c392d7fdff6f5ace8d032d9eacbf78b4c/readme_image/cafemap_tap2.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/c5be786c392d7fdff6f5ace8d032d9eacbf78b4c/readme_image/cafemap_tap3.png" width="200" /> |
 | **지도 & 내 위치 추적**<br>실시간 마커 배지 확인<br>Follow 모드로 주변 탐색 | **스마트 검색 & 정렬**<br>지역/카페명 검색 및 이동<br>별점/재고순 필터링 | **가게 및 재고 관리**<br>소셜 로그인 권한 획득<br>실시간 수량 업데이트 |
 
 <br>
@@ -63,9 +63,10 @@
 ### 🗺️ 1. 실시간 재고 지도 (Real-time Map)
 * **네이버 지도 연동:** 네이버 지도를 기반으로 카페 위치를 직관적인 마커로 표시합니다.
 * **스마트 배지 (Smart Badge):** 마커 위에 부착된 배지 색상으로 재고 상태를 즉시 파악할 수 있습니다.
-    * 🔴 **Red:** 품절 (Sold Out)
-    * 🟠 **Orange:** 재고 부족 (Low Stock)
-    * 🟢 **Green:** 재고 여유 (Available)
+    * 🔘 **Gray:** 재고 품절 (OUT_OF_STOCK)
+    * 🔴 **Red:** 재고 부족 (Low)
+    * 🟠 **Orange:** 재고 여유 (Normal)
+    * 🟢 **Green:** 재고 여유 (Plenty)
 * **내 위치 추적 (Location Tracking):** 실시간 위치 추적(Follow 모드)을 지원하여 내 주변에 있는 카페를 빠르게 탐색합니다.
 
 ### 🔎 2. 스마트 검색 & 리스트 (Search & Filter)
