@@ -53,10 +53,11 @@
 
 ## 📱 주요 기능 (Key Features)
 
-| 1. 실시간 재고 지도 | 2. 검색 및 리스트 필터 | 3. 관리자 모드 |
-| :---: | :---: | :---: |
-| <img src="https://github.com/jerry7129/madcamp-week1/blob/c5be786c392d7fdff6f5ace8d032d9eacbf78b4c/readme_image/cafemap_tap1.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/c5be786c392d7fdff6f5ace8d032d9eacbf78b4c/readme_image/cafemap_tap2.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/c5be786c392d7fdff6f5ace8d032d9eacbf78b4c/readme_image/cafemap_tap3.png" width="200" /> |
-| **지도 & 내 위치 추적**<br>실시간 마커 배지 확인<br>Follow 모드로 주변 탐색 | **스마트 검색 & 정렬**<br>지역/카페명 검색 및 이동<br>별점/재고순 필터링 | **가게 및 재고 관리**<br>소셜 로그인 권한 획득<br>실시간 수량 업데이트 |
+| 1. 실시간 재고 지도 | 2. 카페 검색 | 3. 카페 리스트 및 필터 | 4. 관리자 모드 |
+| :---: | :---: | :---: | :---: |
+| **지도 & 내 위치 추적**<br>실시간 마커 배지 확인<br>Follow 모드로 주변 탐색 | **스마트 검색**<br>지역/카페명 검색 및 이동<br>카페 정보 및 네이버 플레이스 연결 | **리스트 보기 & 정렬**<br>별점/재고순 필터링 | **가게 및 재고 관리**<br>소셜 로그인 권한 획득<br>실시간 수량 업데이트 |
+| <img src="https://github.com/jerry7129/madcamp-week1/blob/aacf79bb69006402dc9be96b5c5cea0fbb8f9f39/readme_image/cafemap_tap1.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/aacf79bb69006402dc9be96b5c5cea0fbb8f9f39/readme_image/cafemap_tap1-1.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/aacf79bb69006402dc9be96b5c5cea0fbb8f9f39/readme_image/cafemap_tap2.png" width="200" /> | <img src="https://github.com/jerry7129/madcamp-week1/blob/aacf79bb69006402dc9be96b5c5cea0fbb8f9f39/readme_image/cafemap_tap3.png" width="200" /> |
+|| <img src="https://github.com/jerry7129/madcamp-week1/blob/aacf79bb69006402dc9be96b5c5cea0fbb8f9f39/readme_image/cafemap_tap1-2.png" width="200" /> |||
 
 <br>
 
