@@ -10,7 +10,7 @@
 | 이름 (Name) | 역할 (Role) | 학교/학과 (Affiliation) | GitHub |
 | :---: | :---: | :---: | :---: |
 | **김승관** | Android Developer<br>(Map, UI/UX, Auth) | 한양대학교<br>컴퓨터소프트웨어학부 | [@jerry7129](https://github.com/jerry7129) |
-| **김현우** | Android Developer<br>(Firebase) | [학교/학과 입력] | [@GithubID](https://github.com/GithubID) |
+| **김현우** | Android Developer<br>(Firebase) | KAIST<br>전기전자공학부 | [@GithubID](https://github.com/GithubID) |
 
 <br>
 
@@ -95,8 +95,9 @@
     * 네이버 지도 클라이언트 ID와 Secret Key가 필요합니다.
     ```properties
     sdk.dir=...
-    NAVER_CLIENT_ID=여러분의_CLIENT_ID
-    NAVER_CLIENT_SECRET=여러분의_SECRET_KEY
+    NAVERMAP_CLIENT_ID=네이버_클라이언트_ID
+    KAKAO_NATIVE_APP_KEY=카카오_네이티브_앱_키
+    GOOGLE_WEB_CLIENT_ID=구글_웹_클라이언트_ID
     ```
 3. **`google-services.json` 추가**
     * Firebase 프로젝트 설정 파일(`google-services.json`)을 `app/` 폴더 안에 위치시켜야 합니다.
