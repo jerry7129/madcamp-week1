@@ -63,9 +63,10 @@
 ### 🗺️ 1. 실시간 재고 지도 (Real-time Map)
 * **네이버 지도 연동:** 네이버 지도를 기반으로 카페 위치를 직관적인 마커로 표시합니다.
 * **스마트 배지 (Smart Badge):** 마커 위에 부착된 배지 색상으로 재고 상태를 즉시 파악할 수 있습니다.
-    * 🔴 **Red:** 품절 (Sold Out)
-    * 🟠 **Orange:** 재고 부족 (Low Stock)
-    * 🟢 **Green:** 재고 여유 (Available)
+    * 🔘 **Gray:** 재고 품절 (OUT_OF_STOCK)
+    * 🔴 **Red:** 재고 부족 (Low)
+    * 🟠 **Orange:** 재고 여유 (Normal)
+    * 🟢 **Green:** 재고 여유 (Plenty)
 * **내 위치 추적 (Location Tracking):** 실시간 위치 추적(Follow 모드)을 지원하여 내 주변에 있는 카페를 빠르게 탐색합니다.
 
 ### 🔎 2. 스마트 검색 & 리스트 (Search & Filter)
